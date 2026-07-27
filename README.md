@@ -82,3 +82,18 @@ scripts and is not what scanners penalise. (CSSOM writes like
 **Trade-off:** nonces require a per-request render, so `app/page.tsx` calls
 `await connection()` and the route is now `ƒ` (dynamic) rather than statically
 prerendered. On Vercel this is negligible for a page this size.
+
+## Case studies, SEO, analytics
+
+- `app/work/[slug]/page.tsx` renders long-form case studies from `CASES` in
+  `lib/data.ts` (each has `slug` + `body: [{h, p}]`). Add a case study by adding
+  an entry there — the route, sitemap, and card link all follow automatically.
+- `app/opengraph-image.tsx` generates the 1200×630 share card at build time.
+- JSON-LD (Person + ProfessionalService) is in `app/layout.tsx`.
+- `@vercel/analytics` is mounted in the layout; it needs Web Analytics enabled
+  in the Vercel project dashboard to record anything.
+
+**CSP note:** `script-src` is `'self' 'nonce-…'` — deliberately *without*
+`'strict-dynamic'`, because strict-dynamic makes the browser ignore `'self'`
+and would block the Vercel Analytics beacon (it exposes no nonce prop). Inline
+script injection is still forbidden, which is the attack that matters here.

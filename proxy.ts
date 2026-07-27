@@ -8,7 +8,14 @@ import { NextRequest, NextResponse } from "next/server";
  * nonce to its own framework/bundle script tags automatically.
  *
  * Why: a CSP with `script-src 'unsafe-inline'` is what caps a Security Headers
- * scan at A. Nonce + 'strict-dynamic' removes it and gets A+.
+ * scan at A. The nonce removes the need for it.
+ *
+ * Deliberately NOT using 'strict-dynamic': it makes the browser ignore 'self',
+ * so any same-origin <script src> that Next didn't render itself — notably the
+ * Vercel Analytics beacon, which exposes no nonce prop — would be blocked in
+ * production. 'self' + nonce still forbids inline injection, which is the
+ * attack that matters here; this site has no user uploads to smuggle a script
+ * into. If analytics is ever removed, add 'strict-dynamic' back.
  *
  * Note on style-src: React and Framer Motion emit real `style="…"` attributes
  * on first paint, so 'unsafe-inline' has to stay for styles. That is a far
@@ -24,7 +31,7 @@ export function proxy(request: NextRequest) {
 
   const csp = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""};
+    script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ""};
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self' data:;

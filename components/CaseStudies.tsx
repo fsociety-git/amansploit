@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Reveal from "./Reveal";
 import { CASES } from "@/lib/data";
 
@@ -17,12 +18,14 @@ export default function CaseStudies() {
         <div className="mt-14 space-y-6">
           {CASES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
+              <Link href={`/work/${c.slug}`} className="block">
               <article className="card-line card-hover rounded-xl p-7 md:p-9 grid md:grid-cols-[1fr_1.6fr] gap-7">
                 <div>
                   <div className="kicker">{c.kicker}</div>
                   <h3 className="mt-3 font-display font-bold text-2xl md:text-[1.7rem] leading-tight">
                     {c.title}
                   </h3>
+                  <div className="mt-4 font-mono text-xs text-acid">read the case study →</div>
                   <div className="mt-5 flex flex-wrap gap-2">
                     {c.stack.map((t) => (
                       <span
@@ -49,6 +52,7 @@ export default function CaseStudies() {
                   </p>
                 </div>
               </article>
+            </Link>
             </Reveal>
           ))}
         </div>
