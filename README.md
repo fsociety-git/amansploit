@@ -62,3 +62,23 @@ without clipping, all content sections stack cleanly.
   the `sm` breakpoint so nothing clips under the fixed header.
 - Particle density and pixel ratio step down on small screens / low core counts
   (see `ParticleCanvas.tsx`).
+
+## Content Security Policy
+
+The CSP is **nonce-based** and lives in `proxy.ts` (Next 16 renamed `middleware`
+→ `proxy`), not in `next.config.ts` — two CSP headers would be intersected by
+the browser and break the page. `next.config.ts` still owns the other headers
+(HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy).
+
+`script-src` uses `'nonce-…' 'strict-dynamic'` with no `'unsafe-inline'`, which
+is what takes a Security Headers scan from A to A+. Next attaches the nonce to
+its own framework and bundle scripts automatically.
+
+`style-src` keeps `'unsafe-inline'` because React and Framer Motion emit real
+`style="…"` attributes on first paint. That is a much smaller risk than inline
+scripts and is not what scanners penalise. (CSSOM writes like
+`el.style.opacity = …` are never affected by CSP.)
+
+**Trade-off:** nonces require a per-request render, so `app/page.tsx` calls
+`await connection()` and the route is now `ƒ` (dynamic) rather than statically
+prerendered. On Vercel this is negligible for a page this size.

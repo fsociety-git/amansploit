@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { connection } from "next/server";
 import Nav from "@/components/Nav";
 import ActOne from "@/components/ActOne";
 import ToolMarquee from "@/components/ToolMarquee";
@@ -11,7 +12,11 @@ import Footer from "@/components/Footer";
 
 const ParticleCanvas = dynamic(() => import("@/components/experience/ParticleCanvas"));
 
-export default function Home() {
+// Nonce-based CSP (proxy.ts) requires a per-request render — a statically
+// prerendered page has no request to mint a nonce for.
+export default async function Home() {
+  await connection();
+
   return (
     <>
       <ParticleCanvas />
