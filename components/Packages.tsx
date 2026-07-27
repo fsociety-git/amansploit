@@ -84,6 +84,18 @@ export default function Packages() {
               Non-profit, pre-revenue startup, or student project? Say so — the price moves
               again.
             </p>
+            <a
+              href="/sample-penetration-test-report.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg border border-acid/40 text-acid font-medium px-5 py-2.5 hover:bg-acid/10 transition-colors"
+            >
+              Read a sample report (PDF)
+              <span className="font-mono text-xs">↓</span>
+            </a>
+            <p className="mt-2 font-mono text-[11px] text-dim/70">
+              12 pages, fictional target — so you can judge the writing before you commit.
+            </p>
           </div>
         </Reveal>
       </div>

@@ -29,6 +29,10 @@ const PROMISES = [
     p: "If a scan would answer your question, or the real problem is a configuration you can change this afternoon, I will say so. That is worth more to both of us than an invoice.",
   },
   {
+    h: "You can read my writing before you buy.",
+    p: "A penetration test is ultimately a document. There is a full sample report on this site — a real one in every respect except that the target is fictional — so you can judge the depth and clarity before you commission anything.",
+  },
+  {
     h: "Your data stays yours.",
     p: "Findings are stored as evidence, not as copies of your data. Secrets and personal information get masked at capture. Everything is deleted on request when the engagement closes.",
   },
