@@ -1,7 +1,7 @@
 "use client";
 
 import Reveal from "./Reveal";
-import { LINKS } from "@/lib/data";
+import { BOOKING_URL, LINKS, WHATSAPP } from "@/lib/data";
 
 export default function Contact() {
   return (
@@ -29,19 +29,36 @@ export default function Contact() {
               <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
             </a>
             <a
-              href={LINKS.linkedin}
+              href={`https://wa.me/${WHATSAPP}`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-lg border border-line text-ink font-medium px-7 py-3.5 hover:border-acid/50 hover:text-acid transition-colors"
             >
-              Connect on LinkedIn
+              Message on WhatsApp
             </a>
+            {BOOKING_URL && (
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-line text-ink font-medium px-7 py-3.5 hover:border-acid/50 hover:text-acid transition-colors"
+              >
+                Book a 15-min call
+              </a>
+            )}
           </div>
         </Reveal>
 
         <Reveal delay={0.25}>
           <p className="mt-8 font-mono text-xs text-dim">
-            {LINKS.location}
+            {LINKS.location} ·{" "}
+            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-acid transition-colors">
+              LinkedIn
+            </a>
+          </p>
+          <p className="mt-2 font-mono text-[11px] text-dim/70">
+            Not sure what you need? Use the{" "}
+            <a href="#estimate" className="text-acid hover:underline">scope estimator</a> first.
           </p>
         </Reveal>
       </div>

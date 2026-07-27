@@ -97,3 +97,24 @@ prerendered. On Vercel this is negligible for a page this size.
 `'strict-dynamic'`, because strict-dynamic makes the browser ignore `'self'`
 and would block the Vercel Analytics beacon (it exposes no nonce prop). Inline
 script injection is still forbidden, which is the attack that matters here.
+
+## Commercial sections (Tier 1)
+
+All copy and numbers live in `lib/data.ts`:
+
+- `PACKAGES` — pricing cards. **The prices are starting anchors, not researched
+  quotes. Set your real numbers before this goes in front of a buyer.**
+- `ESTIMATOR` — drives the interactive scope estimator. It hands the finished
+  scope to WhatsApp or email rather than posting to a backend, so there is no
+  mail service, no inbox to secure, and no lead data at rest.
+- `WHATSAPP` — country code + number, digits only.
+- `BOOKING_URL` — set to a Cal.com/Calendly link to reveal the "Book a call"
+  button; empty hides it.
+- `CREDENTIALS` — add a public `verify` URL per cert and a "verify" link appears.
+- `AFFILIATIONS` — text-only, no logo assets required.
+- `TESTIMONIALS` — **empty by default and the section renders nothing while it
+  is empty.** Only add real, permissioned quotes. A fabricated testimonial on a
+  security consultant's site is the fastest way to lose a technical buyer.
+
+`components/WorkingWithMe.tsx` carries the trust load that a photo and intro
+video normally would — explicit guarantees and specifics instead of a face.

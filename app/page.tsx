@@ -6,6 +6,10 @@ import ToolMarquee from "@/components/ToolMarquee";
 import Services from "@/components/Services";
 import CaseStudies from "@/components/CaseStudies";
 import Process from "@/components/Process";
+import Packages from "@/components/Packages";
+import Estimator from "@/components/Estimator";
+import WorkingWithMe from "@/components/WorkingWithMe";
+import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -31,6 +35,10 @@ export default async function Home() {
           <Services />
           <CaseStudies />
           <Process />
+          <Packages />
+          <Estimator />
+          <Testimonials />
+          <WorkingWithMe />
           <About />
         </div>
 

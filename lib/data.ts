@@ -140,3 +140,111 @@ export const TOOLS = [
   "Next.js", "TypeScript", "Supabase", "PostgreSQL", "GitHub Actions",
   "Docker", "Tor", "Cloudflare Zero Trust", "AWS", "Terraform",
 ];
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * CLIENT-FACING COMMERCIALS
+ * Everything below is meant to be edited by hand. The prices are sensible
+ * starting anchors, not researched quotes — set your real numbers before this
+ * goes in front of a buyer.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+export const WHATSAPP = "919209279973"; // country code + number, digits only
+export const BOOKING_URL = "https://cal.com/amansploit";
+
+/** Engagement packages. `from` values are INR; `usd` is the rough equivalent. */
+export const PACKAGES = [
+  {
+    name: "Web App Assessment",
+    from: 45000,
+    usd: 530,
+    duration: "4–6 days",
+    best: "A single web application or dashboard",
+    includes: [
+      "Manual testing — not an automated scan",
+      "Full OWASP Top 10 coverage",
+      "Authentication & authorisation testing",
+      "Report with reproduction steps and fixes",
+      "One free retest after you fix things",
+    ],
+  },
+  {
+    name: "Web + API Assessment",
+    from: 85000,
+    usd: 1000,
+    duration: "7–10 days",
+    best: "A product with a REST API and multiple user roles",
+    featured: true,
+    includes: [
+      "Everything in Web App Assessment",
+      "REST API testing (authz, IDOR, rate limits)",
+      "Role-matrix and privilege-escalation testing",
+      "Business-logic abuse cases",
+      "Executive summary for non-technical stakeholders",
+      "One free retest after you fix things",
+    ],
+  },
+  {
+    name: "Security Engineering",
+    from: 9000,
+    usd: 105,
+    unit: "/ day",
+    duration: "Retainer or project",
+    best: "Tooling, automation, SIEM work, or secure builds",
+    includes: [
+      "Custom detection & monitoring tooling",
+      "SIEM/log-pipeline engineering",
+      "Secure full-stack development",
+      "CI/CD hardening & secret scanning",
+      "Documented, handover-ready code",
+    ],
+  },
+];
+
+/** Drives the estimator. Multipliers apply to the base package price. */
+export const ESTIMATOR = {
+  scope: [
+    { id: "web", label: "Web app", base: 45000, usd: 530 },
+    { id: "webapi", label: "Web app + API", base: 85000, usd: 1000 },
+    { id: "mobile", label: "Mobile app", base: 65000, usd: 765 },
+    { id: "infra", label: "Network / infrastructure", base: 55000, usd: 650 },
+  ],
+  size: [
+    { id: "s", label: "Small (a few screens, 1 role)", mult: 1 },
+    { id: "m", label: "Medium (several modules, 2–3 roles)", mult: 1.5 },
+    { id: "l", label: "Large (complex product, many roles)", mult: 2.2 },
+  ],
+  extras: [
+    { id: "retest", label: "Extra retest round", add: 8000, usd: 95 },
+    { id: "threat", label: "Threat model & architecture review", add: 15000, usd: 175 },
+    { id: "rush", label: "Rush (start within a week)", mult: 1.2 },
+  ],
+};
+
+/**
+ * Real client quotes only. Leave this empty until you have permission to
+ * publish one — the section renders nothing while the array is empty.
+ * Never place invented testimonials here.
+ */
+export const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  role: string;
+}[] = [];
+
+/** Credentials. Add the public verification URL as you collect them. */
+export const CREDENTIALS = [
+  { name: "CEH Master", issuer: "EC-Council", verify: "" },
+  { name: "CompTIA Security+", issuer: "CompTIA", verify: "" },
+  { name: "Certified Network Defender", issuer: "EC-Council", verify: "" },
+  { name: "ECSS", issuer: "EC-Council", verify: "" },
+  { name: "Top 1% — TryHackMe", issuer: "TryHackMe", verify: "" },
+];
+
+/** Places the work has happened. Text-only, no logo assets needed. */
+export const AFFILIATIONS = [
+  "LTS",
+  "InLighnX Global",
+  "Coventry University",
+  "EC-Council University",
+  "PSB Academy",
+];
