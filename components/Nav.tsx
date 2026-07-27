@@ -30,12 +30,15 @@ export default function Nav() {
             {ITEMS.map((it) => (
               <a
                 key={it.id}
-                href={`#${it.id}`}
+                href={`/#${it.id}`}
                 className="text-sm text-dim hover:text-acid transition-colors"
               >
                 {it.label}
               </a>
             ))}
+            <a href="/tools" className="text-sm text-acid/90 hover:text-acid transition-colors">
+              Free tools
+            </a>
           </nav>
           <div className="flex items-center gap-3">
             {/* On desktop this is the ⌘K hint; on mobile it *is* the navigation. */}

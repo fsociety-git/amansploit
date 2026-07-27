@@ -118,3 +118,40 @@ All copy and numbers live in `lib/data.ts`:
 
 `components/WorkingWithMe.tsx` carries the trust load that a photo and intro
 video normally would — explicit guarantees and specifics instead of a face.
+
+## Free tools (`/tools`)
+
+Two passive, public checks that double as lead magnets:
+
+- `/tools/email-spoofing` — SPF/DKIM/DMARC verdict. DMARC governs spoofability:
+  no record or `p=none` means receivers were never told to reject forged mail.
+- `/tools/security-headers` — grades HTTP response headers and gives exact fixes.
+
+Server logic lives in `app/api/tools/*/route.ts` (Node runtime — needs `node:dns`).
+
+### SSRF protection — read before adding another tool
+
+`lib/safe-url.ts` guards every endpoint that touches a user-supplied host:
+scheme allowlist, no credentials or odd ports, literal private-IP rejection,
+A/AAAA resolution with private/loopback/link-local/CGNAT/metadata blocking,
+manual redirect handling that re-validates every hop, hard timeout, and the
+response body is never read. Verified against `127.0.0.1`, `localhost`,
+`169.254.169.254`, `10.x`, `192.168.x`, `0.0.0.0`, `file://`,
+`metadata.google.internal`, non-standard ports, and URL credentials.
+
+Residual risk, documented honestly in the source: DNS rebinding between
+resolution and connection is not fully closed, because Node's fetch will not
+pin a socket to a validated address.
+
+### Two correctness rules these tools follow
+
+1. **Never grade a blocked response.** A WAF or bot-protection page carries none
+   of the real site's headers; grading it would tell someone their site scores F
+   when it may be fine. 401/403/405/406/429/503 return `blocked: true` instead.
+2. **A DNS failure is not "no record".** Reporting a timeout as a missing SPF
+   record would tell a visitor they are spoofable when they are not. Only
+   `ENODATA`/`ENOTFOUND` count as definitive; anything else returns
+   `inconclusive: true`.
+
+Result renderers live in `components/tools/Results.tsx` as client components —
+a Server Component cannot pass a render function to a Client Component.

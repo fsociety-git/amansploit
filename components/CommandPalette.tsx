@@ -30,6 +30,7 @@ export default function CommandPalette({
     { label: "goto process", hint: "How engagements run", action: () => go("process") },
     { label: "goto about", hint: "Who I am", action: () => go("about") },
     { label: "goto contact", hint: "Start a project", action: () => go("contact") },
+    { label: "free tools", hint: "Headers + email spoofing", action: () => { window.location.href = "/tools"; } },
     { label: "mail me", hint: LINKS.email, action: () => { window.location.href = `mailto:${LINKS.email}`; } },
     { label: "open linkedin", hint: "/in/aman-sonkamble", action: () => { window.open(LINKS.linkedin, "_blank"); } },
   ];
