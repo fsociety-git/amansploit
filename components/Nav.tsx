@@ -36,6 +36,9 @@ export default function Nav() {
                 {it.label}
               </a>
             ))}
+            <a href="/blog" className="text-sm text-dim hover:text-acid transition-colors">
+              Writing
+            </a>
             <a href="/tools" className="text-sm text-acid/90 hover:text-acid transition-colors">
               Free tools
             </a>

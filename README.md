@@ -155,3 +155,29 @@ pin a socket to a validated address.
 
 Result renderers live in `components/tools/Results.tsx` as client components —
 a Server Component cannot pass a render function to a Client Component.
+
+## Writing (`/blog`)
+
+Markdown files in `content/posts/*.md`. Drop a file in and the index, sitemap
+and RSS feed pick it up — no CMS, no database, nothing to keep patched.
+
+```markdown
+---
+title: "Post title"
+description: "One or two sentences — used for the card and meta description."
+date: "2026-07-27"
+tags: ["pentesting", "dmarc"]
+draft: false        # drafts are hidden in production, visible in dev
+---
+```
+
+`lib/posts.ts` handles parsing (gray-matter), rendering (remark → rehype with
+syntax highlighting), reading time, and draft filtering. Slugs are validated
+against `^[a-z0-9-]+$` before touching the filesystem — the slug comes from the
+URL, so path traversal has to be closed there.
+
+`/feed.xml` is the RSS feed. Prose styling is `.prose-sec` in `globals.css`.
+
+Two posts ship with the site: a buyer-education guide anchored to the sample
+report, and one anchored to the email-spoofing tool. Both link back to the
+estimator — that is the point of writing them.
