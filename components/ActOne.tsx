@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import DecryptText from "./DecryptText";
 import Counter from "./Counter";
 import { CERTS, STATS } from "@/lib/data";
@@ -32,6 +32,8 @@ export default function ActOne() {
   const posRef = useRef<HTMLElement>(null);
   const statRef = useRef<HTMLElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsFired = useRef(false);
 
   useEffect(() => {
     let raf = 0;
@@ -62,6 +64,10 @@ export default function ActOne() {
 
       // beat 3 — stats
       const st = band(p, 0.62, 0.72, 0.94, 1);
+      if (st > 0.05 && !statsFired.current) {
+        statsFired.current = true;
+        setStatsVisible(true); // start the count-up only once the beat is on screen
+      }
       apply(statRef.current, st, 40 - 70 * Math.min(Math.max((p - 0.62) / 0.38, 0), 1));
     };
 
@@ -118,11 +124,8 @@ export default function ActOne() {
           >
             I&apos;m <span className="text-ink font-medium">Aman Sonkamble</span> — a security
             engineer and full-stack developer. I penetration-test web apps and APIs, build
-            security automation that catches real incidents, and{" "}
-            <span className="hidden sm:inline">
-              ship production software with the paranoia already built in.
-            </span>
-            <span className="sm:hidden">build software that assumes it will be attacked.</span>
+            security automation that catches real incidents, and ship software that assumes
+            it will be attacked.
           </motion.p>
 
           <motion.div
@@ -190,7 +193,7 @@ export default function ActOne() {
           {STATS.map((s) => (
             <div key={s.label}>
               <div className="font-display font-bold text-4xl md:text-5xl text-ink">
-                <Counter value={s.value} prefix={s.prefix} suffix={s.suffix} />
+                <Counter value={s.value} prefix={s.prefix} suffix={s.suffix} play={statsVisible} />
               </div>
               <div className="mt-2 font-mono text-[11px] text-dim uppercase tracking-wider">
                 {s.label}

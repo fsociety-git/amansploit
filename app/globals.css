@@ -104,6 +104,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .pulse-dot, .marquee-track, .caret::after { animation: none; }
+  /* with the animation off, the seamless-loop duplicate is just a stray row */
+  .marquee-dup { display: none; }
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
