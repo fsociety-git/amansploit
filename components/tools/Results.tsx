@@ -1,5 +1,8 @@
 "use client";
 
+import NextStep from "./NextStep";
+import PrintButton from "./PrintButton";
+
 /**
  * Result renderers for the tools.
  *
@@ -54,6 +57,8 @@ export function HeadersResult({ d }: { d: Record<string, unknown> }) {
         </div>
       )}
 
+      <PrintButton />
+
       <div className="mt-5 space-y-3">
         {checks.map((c) => (
           <div key={c.key} className="card-line rounded-xl p-5">
@@ -77,6 +82,20 @@ export function HeadersResult({ d }: { d: Record<string, unknown> }) {
           </div>
         ))}
       </div>
+
+      <NextStep
+        severity={
+          d.blocked
+            ? "unknown"
+            : good
+              ? "good"
+              : grade === "B" || grade === "C"
+                ? "middling"
+                : "bad"
+        }
+        offerSlug="security-headers"
+        problem={`${checks.filter((c) => !c.present).length} of ${checks.length} headers are missing on ${String(d.target)}, which is a grade ${grade}. Each one is a single line of server configuration.`}
+      />
     </div>
   );
 }
@@ -111,6 +130,8 @@ export function EmailResult({ d }: { d: Record<string, unknown> }) {
         <p className="mt-3 text-lg text-ink leading-relaxed">{String(d.headline)}</p>
         <div className="mt-2 font-mono text-xs text-dim">{domain}</div>
       </div>
+
+      <PrintButton />
 
       <div className="mt-5 grid sm:grid-cols-3 gap-3">
         {[
@@ -176,6 +197,24 @@ export function EmailResult({ d }: { d: Record<string, unknown> }) {
           </pre>
         </div>
       )}
+
+      <NextStep
+        severity={
+          d.inconclusive
+            ? "unknown"
+            : verdict === "spoofable"
+              ? "bad"
+              : verdict === "partial"
+                ? "middling"
+                : "good"
+        }
+        offerSlug="email-spoofing"
+        problem={
+          verdict === "spoofable"
+            ? `Right now, anyone on the internet can send email that appears to come from ${domain}. Receiving servers have been given no instruction to refuse it.`
+            : `${domain} has partial protection — detection is in place but enforcement isn't, so forged mail can still be delivered.`
+        }
+      />
     </div>
   );
 }

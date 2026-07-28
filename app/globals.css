@@ -156,3 +156,103 @@ body {
 .hljs-string, .hljs-attr { color: #2de0b3; }
 .hljs-number, .hljs-built_in { color: #f0c667; }
 .hljs-title, .hljs-name, .hljs-function { color: #e8eef4; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Print / Save-as-PDF.
+
+   The tool results double as a document someone forwards to whoever approves
+   spending. That means it has to survive leaving the browser: dark-on-black is
+   unreadable on paper and burns a cartridge, so print flips to ink-on-white,
+   drops the chrome, and stamps provenance in the margins via @page.
+
+   Kept here rather than in a component because it has to reach elements those
+   components don't own — nav, footer, the canvas.
+   ───────────────────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  /* Flip to ink-on-paper. The site's palette is unreadable printed. */
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Chrome that has no meaning on paper. */
+  header,
+  footer,
+  nav,
+  canvas,
+  form,
+  .print\:hidden,
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  /* Cards become ruled blocks — borders survive printing, fills don't. */
+  .card-line,
+  [class*="rounded-xl"] {
+    background: transparent !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  .kicker,
+  strong {
+    color: #111 !important;
+  }
+
+  p,
+  li,
+  dd,
+  span {
+    color: #333 !important;
+  }
+
+  pre,
+  code {
+    background: #f4f4f4 !important;
+    color: #111 !important;
+    border: 1px solid #e0e0e0 !important;
+    white-space: pre-wrap !important;
+    word-break: break-all;
+  }
+
+  /* Links are useless as links on paper; print the destination instead. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 10px;
+    color: #666;
+  }
+
+  /* Provenance, so a forwarded page still says where it came from. */
+  main::before {
+    content: "amansploit.com — free security check";
+    display: block;
+    font-size: 11px;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+    margin-bottom: 18px;
+  }
+
+  main::after {
+    content: "Generated at amansploit.com/tools — passive checks only, nothing scanned or stored.";
+    display: block;
+    font-size: 10px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 6px;
+    margin-top: 22px;
+  }
+}

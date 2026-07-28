@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://amansploit.com/tools/email-spoofing", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/security-headers", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/blog", lastModified: now, changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/fix", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/data-handling", lastModified: now, changeFrequency: "yearly" as const, priority: 0.6 },
     ...posts.map((p) => ({
       url: `https://amansploit.com/blog/${p.slug}`,

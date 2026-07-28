@@ -54,7 +54,21 @@ export default async function ToolsPage() {
             ))}
           </div>
 
-          <div className="mt-12 card-line rounded-xl p-6">
+          <div className="mt-10 card-line rounded-xl p-6 border-acid/25">
+            <div className="kicker mb-2">If a check turns something up</div>
+            <p className="text-sm text-dim leading-relaxed">
+              Every result comes with the exact fix, and you are welcome to take it and do
+              nothing else — that is genuinely the point of publishing these. If you would
+              rather someone else did it, there are{" "}
+              <Link href="/fix" className="text-acid hover:underline">
+                fixed-price fixes from ₹6,000
+              </Link>
+              , scoped tightly enough to quote without a call. If a check comes back clean,
+              nothing is offered, because there would be nothing to sell.
+            </p>
+          </div>
+
+          <div className="mt-6 card-line rounded-xl p-6">
             <div className="kicker mb-2">How these work</div>
             <p className="text-sm text-dim leading-relaxed">
               Everything here is passive: public DNS lookups and a single HTTP request for
