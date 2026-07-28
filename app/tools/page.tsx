@@ -25,6 +25,18 @@ export const TOOLS_LIST = [
     tag: "subdomains \u00b7 attack surface",
   },
   {
+    href: "/tools/dns",
+    name: "DNS hygiene",
+    desc: "CAA, DNSSEC, nameserver resilience, wildcard records, and dangling CNAMEs pointing at services that no longer exist \u2014 the precondition for subdomain takeover.",
+    tag: "CAA \u00b7 DNSSEC \u00b7 takeover",
+  },
+  {
+    href: "/tools/tls",
+    name: "TLS configuration",
+    desc: "Which protocol versions and ciphers your server still negotiates, whether the certificate chain validates, and how long before it expires. A padlock says none of this.",
+    tag: "TLS \u00b7 ciphers \u00b7 certificates",
+  },
+  {
     href: "/tools/security-headers",
     name: "Security headers checker",
     desc: "Grades your HTTP response headers — CSP, HSTS, frame protection and more — and gives you the exact values to set.",

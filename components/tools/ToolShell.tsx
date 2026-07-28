@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LINKS, WHATSAPP } from "@/lib/data";
-import { EmailResult, HeadersResult, SurfaceResult } from "./Results";
+import { DnsResult, EmailResult, HeadersResult, SurfaceResult, TlsResult } from "./Results";
 
 export default function ToolShell({
   title,
@@ -21,7 +21,7 @@ export default function ToolShell({
   placeholder: string;
   endpoint: string;
   cta: string;
-  variant: "headers" | "email" | "surface";
+  variant: "headers" | "email" | "surface" | "tls" | "dns";
   /**
    * Explanatory content rendered below the tool. A page that is only a form has
    * nothing for a search engine to rank and nothing for a visitor who arrived
@@ -102,7 +102,7 @@ export default function ToolShell({
           </div>
         )}
 
-        {state === "done" && data && variant !== "surface" && Boolean(data.blocked || data.inconclusive) && (
+        {state === "done" && data && !["surface","tls","dns"].includes(variant) && Boolean(data.blocked || data.inconclusive) && (
           <div className="mt-8 card-line rounded-xl p-6 border-yellow-500/40">
             <div className="kicker mb-2 text-yellow-400">Inconclusive</div>
             <p className="text-[15px] text-ink leading-relaxed">{typeof data.error === "string" ? data.error : "This check could not be completed."}</p>
@@ -112,12 +112,16 @@ export default function ToolShell({
           </div>
         )}
 
-        {state === "done" && data && (variant === "surface" || !Boolean(data.blocked || data.inconclusive)) && (
+        {state === "done" && data && (["surface","tls","dns"].includes(variant) || !Boolean(data.blocked || data.inconclusive)) && (
           <div className="mt-10">
             {variant === "headers" ? (
               <HeadersResult d={data} />
             ) : variant === "surface" ? (
               <SurfaceResult d={data} />
+            ) : variant === "tls" ? (
+              <TlsResult d={data} />
+            ) : variant === "dns" ? (
+              <DnsResult d={data} />
             ) : (
               <EmailResult d={data} />
             )}

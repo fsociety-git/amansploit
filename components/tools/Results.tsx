@@ -332,3 +332,159 @@ export function SurfaceResult({ d }: { d: Record<string, unknown> }) {
     </div>
   );
 }
+
+/* ── TLS ──────────────────────────────────────────────────────────────── */
+
+interface VersionRow { version: string; offered: boolean; cipher?: string; untestable?: boolean }
+
+export function TlsResult({ d }: { d: Record<string, unknown> }) {
+  const host = String(d.host);
+  if (d.inconclusive) {
+    return (
+      <div>
+        <div className="card-line rounded-xl p-7 border-yellow-500/40">
+          <div className="font-mono text-xs tracking-[0.2em] text-yellow-400">INCONCLUSIVE</div>
+          <p className="mt-3 text-lg text-ink leading-relaxed">{String(d.headline)}</p>
+        </div>
+        <NextStep severity="unknown" offerSlug="security-headers" />
+      </div>
+    );
+  }
+
+  const grade = String(d.grade);
+  const good = grade === "A";
+  const versions = (d.versions ?? []) as VersionRow[];
+  const issues = (d.issues ?? []) as string[];
+  const cert = d.certificate as {
+    subject: string | null; issuer: string | null; validTo: string | null;
+    daysLeft: number | null; altNames: string[]; trusted: boolean;
+  } | null;
+  const neg = d.negotiated as { protocol?: string; cipher?: string };
+
+  return (
+    <div>
+      <div className="card-line rounded-xl p-7 flex items-center gap-6">
+        <div className={`shrink-0 grid place-items-center h-24 w-24 rounded-xl font-display font-bold text-4xl ${good ? "bg-acid text-void" : "bg-panel2 text-acid border border-acid/40"}`}>
+          {grade}
+        </div>
+        <div className="min-w-0">
+          <div className="font-mono text-xs text-dim break-all">{host}</div>
+          <div className="mt-1 text-ink">{neg?.protocol}<span className="text-dim"> · {neg?.cipher}</span></div>
+        </div>
+      </div>
+
+      <PrintButton />
+
+      <p className="mt-5 text-[15px] text-ink leading-relaxed">{String(d.headline)}</p>
+
+      <div className="mt-5 card-line rounded-xl p-5">
+        <div className="kicker mb-3">Protocol versions offered</div>
+        <div className="space-y-2">
+          {versions.map((v) => (
+            <div key={v.version} className="flex items-center justify-between gap-3">
+              <span className="font-mono text-[13px] text-ink">{v.version}</span>
+              <span className="flex items-center gap-3">
+                {v.cipher && <span className="font-mono text-[11px] text-dim">{v.cipher}</span>}
+                <span className={`font-mono text-[11px] ${v.offered ? (v.version === "TLSv1" || v.version === "TLSv1.1" ? "text-red-400" : "text-acid") : v.untestable ? "text-yellow-400" : "text-dim"}`}>
+                  {v.offered ? "offered" : v.untestable ? "not testable" : "not offered"}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-[12px] text-dim/80 leading-relaxed">
+          &ldquo;Not testable&rdquo; means this checker&apos;s own TLS library refuses to speak that
+          version, so the server&apos;s answer is unknown — not that it declined.
+        </p>
+      </div>
+
+      {issues.length > 0 && (
+        <div className="mt-5 card-line rounded-xl p-5 border-yellow-500/30">
+          <div className="kicker mb-2 text-yellow-400">Worth changing</div>
+          <ul className="space-y-2">
+            {issues.map((i) => <li key={i} className="text-sm text-dim leading-relaxed">— {i}</li>)}
+          </ul>
+        </div>
+      )}
+
+      {cert && (
+        <div className="mt-5 card-line rounded-xl p-5">
+          <div className="kicker mb-3">Certificate</div>
+          <div className="space-y-1.5 font-mono text-[12px]">
+            <div className="flex justify-between gap-3"><span className="text-dim">subject</span><span className="text-ink break-all">{cert.subject ?? "—"}</span></div>
+            <div className="flex justify-between gap-3"><span className="text-dim">issuer</span><span className="text-ink break-all">{cert.issuer ?? "—"}</span></div>
+            <div className="flex justify-between gap-3"><span className="text-dim">expires</span><span className={cert.daysLeft !== null && cert.daysLeft < 21 ? "text-yellow-400" : "text-ink"}>{cert.validTo} {cert.daysLeft !== null && `(${cert.daysLeft}d)`}</span></div>
+            <div className="flex justify-between gap-3"><span className="text-dim">chain</span><span className={cert.trusted ? "text-acid" : "text-red-400"}>{cert.trusted ? "validates" : "does not validate"}</span></div>
+          </div>
+          {cert.altNames.length > 1 && (
+            <p className="mt-3 text-[12px] text-dim leading-relaxed break-all">
+              Also covers: {cert.altNames.slice(0, 12).join(", ")}
+              {cert.altNames.length > 12 && ` and ${cert.altNames.length - 12} more`}
+            </p>
+          )}
+        </div>
+      )}
+
+      <NextStep
+        severity={grade === "F" || grade === "C" ? "bad" : grade === "B" ? "middling" : "good"}
+        offerSlug="security-headers"
+        problem={issues[0]}
+      />
+    </div>
+  );
+}
+
+/* ── DNS hygiene ──────────────────────────────────────────────────────── */
+
+interface DnsCheck { key: string; name: string; state: "pass" | "warn" | "fail" | "unknown"; detail: string; fix?: string }
+
+const DNS_MARK = {
+  pass: { g: "▸", c: "text-acid" },
+  warn: { g: "!", c: "text-yellow-400" },
+  fail: { g: "\u00d7", c: "text-red-400" },
+  unknown: { g: "?", c: "text-dim" },
+};
+
+export function DnsResult({ d }: { d: Record<string, unknown> }) {
+  const checks = (d.checks ?? []) as DnsCheck[];
+  const fails = Number(d.failCount ?? 0);
+  const warns = Number(d.warnCount ?? 0);
+
+  return (
+    <div>
+      <div className={`card-line rounded-xl p-7 ${fails ? "border-red-500/40" : warns ? "border-yellow-500/35" : "border-acid/40"}`}>
+        <div className={`font-mono text-xs tracking-[0.2em] ${fails ? "text-red-400" : warns ? "text-yellow-400" : "text-acid"}`}>
+          {String(d.grade).toUpperCase()}
+        </div>
+        <p className="mt-3 text-lg text-ink leading-relaxed">{String(d.headline)}</p>
+        <div className="mt-2 font-mono text-xs text-dim">{String(d.domain)}</div>
+      </div>
+
+      <PrintButton />
+
+      <div className="mt-5 space-y-3">
+        {checks.map((c) => {
+          const m = DNS_MARK[c.state];
+          return (
+            <div key={c.key} className="card-line rounded-xl p-5">
+              <div className="flex items-start gap-3">
+                <span className={m.c}>{m.g}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium text-ink">{c.name}</div>
+                  <p className="mt-1 text-sm text-dim leading-relaxed">{c.detail}</p>
+                  {c.fix && <pre className="mt-2 overflow-x-auto rounded bg-void/70 p-2.5 font-mono text-[11px] text-acid">{c.fix}</pre>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <NextStep
+        severity={fails ? "bad" : warns > 1 ? "middling" : "good"}
+        offerSlug="attack-surface"
+        problem={fails ? `${fails} DNS issue${fails > 1 ? "s" : ""} on ${String(d.domain)} that an attacker would look for before anything else.` : undefined}
+      />
+    </div>
+  );
+}

@@ -10,6 +10,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://amansploit.com/tools", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/email-spoofing", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/attack-surface", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/tools/dns", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/tools/tls", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/security-headers", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/blog", lastModified: now, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: "https://amansploit.com/fix", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
