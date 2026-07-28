@@ -28,8 +28,25 @@ export const metadata: Metadata = {
     "AI security",
     "freelance security engineer",
   ],
+  // Inherited by any page that does not set its own. That is correct for the
+  // homepage and a silent de-indexing bug for anything else, because a page
+  // canonicalised to "/" is telling Google to drop it in favour of the
+  // homepage. Every other route sets its own; a new one must too.
   alternates: { canonical: "https://amansploit.com" },
   twitter: { card: "summary_large_image" },
+  /**
+   * Search Console / Bing Webmaster verification, read from the environment so
+   * proving ownership is a Vercel setting rather than a code change and a
+   * deploy. Set GOOGLE_SITE_VERIFICATION (or BING_SITE_VERIFICATION) to the
+   * token from the "HTML tag" method and the meta tag appears; leave it unset
+   * and nothing is emitted. DNS TXT verification works too and needs neither.
+   */
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : undefined,
+  },
   openGraph: {
     title: "Aman Sonkamble — Security Engineer & Full-Stack Developer",
     description:

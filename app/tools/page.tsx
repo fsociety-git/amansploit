@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { TOOLS_LIST } from "@/lib/tools-list";
 
 export const metadata: Metadata = {
   title: "Free Security Tools | amansploit",
@@ -10,57 +11,6 @@ export const metadata: Metadata = {
     "Free, passive security checks: HTTP security headers grading and email spoofability (SPF/DKIM/DMARC). No signup, nothing stored.",
   alternates: { canonical: "https://amansploit.com/tools" },
 };
-
-export const TOOLS_LIST = [
-  {
-    href: "/tools/email-spoofing",
-    name: "Can someone send email as you?",
-    desc: "Checks SPF, DKIM and DMARC and tells you, in plain English, whether anyone can forge mail from your domain. Most companies fail this.",
-    tag: "SPF · DKIM · DMARC",
-  },
-  {
-    href: "/tools/attack-surface",
-    name: "What the internet can see",
-    desc: "Finds every subdomain ever issued a certificate from public transparency logs, checks which still resolve, and flags the ones whose names suggest admin panels or forgotten staging environments.",
-    tag: "subdomains \u00b7 attack surface",
-  },
-  {
-    href: "/tools/dns",
-    name: "DNS hygiene",
-    desc: "CAA, DNSSEC, nameserver resilience, wildcard records, and dangling CNAMEs pointing at services that no longer exist \u2014 the precondition for subdomain takeover.",
-    tag: "CAA \u00b7 DNSSEC \u00b7 takeover",
-  },
-  {
-    href: "/tools/tls",
-    name: "TLS configuration",
-    desc: "Which protocol versions and ciphers your server still negotiates, whether the certificate chain validates, and how long before it expires. A padlock says none of this.",
-    tag: "TLS \u00b7 ciphers \u00b7 certificates",
-  },
-  {
-    href: "/tools/security-headers",
-    name: "Security headers checker",
-    desc: "Grades your HTTP response headers — CSP, HSTS, frame protection and more — and gives you the exact values to set.",
-    tag: "CSP · HSTS · headers",
-  },
-  {
-    href: "/tools/jwt",
-    name: "JWT decoder",
-    desc: "Read a JSON Web Token's claims with the expiry as a real date, and the usual mistakes flagged \u2014 alg:none, no expiry, lifetimes measured in months. Runs in your browser; the token never leaves the page.",
-    tag: "JWT \u00b7 in-browser",
-  },
-  {
-    href: "/tools/cvss",
-    name: "CVSS 3.1 calculator",
-    desc: "Base score and vector string, implemented against the specification including the round-up rule most calculators get wrong \u2014 with an honest note on where CVSS stops helping.",
-    tag: "CVSS \u00b7 scoring",
-  },
-  {
-    href: "/tools/hash",
-    name: "Hash identifier",
-    desc: "What format is this hash? Where several share a shape, all are listed rather than guessing \u2014 a confident wrong answer costs hours.",
-    tag: "hashes \u00b7 in-browser",
-  },
-];
 
 export default async function ToolsPage() {
   await connection();

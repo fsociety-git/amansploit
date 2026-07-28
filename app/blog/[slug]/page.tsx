@@ -105,11 +105,28 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "BlogPosting",
+                "@id": `https://amansploit.com/blog/${post.slug}#post`,
                 headline: post.title,
                 description: post.description,
                 datePublished: post.date,
-                author: { "@type": "Person", name: "Aman Sonkamble", url: "https://amansploit.com" },
-                mainEntityOfPage: `https://amansploit.com/blog/${post.slug}`,
+                // Frontmatter `updated:` when the post has been revised, otherwise the
+                // publication date. Never a fabricated "freshness" timestamp — a
+                // dateModified that moves on every deploy is a lie told to a crawler.
+                dateModified: post.updated ?? post.date,
+                // Reference the Person node in the sitewide graph rather than repeating
+                // an anonymous author object. Two Person nodes with no shared @id are
+                // two different people as far as a parser is concerned.
+                author: { "@id": "https://amansploit.com/#person" },
+                publisher: { "@id": "https://amansploit.com/#person" },
+                image: [`https://amansploit.com/blog/${post.slug}/opengraph-image`],
+                keywords: post.tags.join(", "),
+                wordCount: post.words,
+                inLanguage: "en",
+                isAccessibleForFree: true,
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": `https://amansploit.com/blog/${post.slug}`,
+                },
               }),
             }}
           />

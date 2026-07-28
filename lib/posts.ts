@@ -27,8 +27,16 @@ export interface PostMeta {
   title: string;
   description: string;
   date: string;
+  /**
+   * Optional `updated:` frontmatter. Feeds schema.org dateModified and the
+   * sitemap's lastmod. Absent unless the post was actually revised — a
+   * modification date that ticks on every deploy trains a crawler to ignore it.
+   */
+  updated?: string;
   tags: string[];
   readingMinutes: number;
+  /** Body word count, for schema.org wordCount. */
+  words: number;
   draft: boolean;
   /** Drafted by the scheduled generator rather than typed by hand. Disclosed on the page. */
   generated: boolean;
@@ -81,8 +89,24 @@ export async function getRelated(slug: string, limit = 3): Promise<PostMeta[]> {
     .map((x) => x.p);
 }
 
-function readingTime(md: string): number {
-  const words = md.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
+/**
+ * YAML turns an unquoted 2026-07-28 into a Date object, and String(Date) gives
+ * "Tue Jul 28 2026 00:00:00 GMT+0000 (…)" — which is not a valid value for
+ * schema.org datePublished, <time dateTime>, or the sitemap's lastmod. Every
+ * post today quotes its date; the one that eventually does not should not
+ * silently poison the structured data.
+ */
+function isoDate(v: unknown): string | undefined {
+  if (v instanceof Date) return v.toISOString().slice(0, 10);
+  if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v)) return v.slice(0, 10);
+  return undefined;
+}
+
+function countWords(md: string): number {
+  return md.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
+}
+
+function readingTime(words: number): number {
   return Math.max(1, Math.round(words / 220));
 }
 
@@ -96,13 +120,16 @@ async function files(): Promise<string[]> {
 
 function toMeta(file: string, raw: string): PostMeta {
   const { data, content } = matter(raw);
+  const words = countWords(content);
   return {
     slug: file.replace(/\.md$/, ""),
     title: String(data.title ?? file),
     description: String(data.description ?? ""),
-    date: String(data.date ?? "1970-01-01"),
+    date: isoDate(data.date) ?? "1970-01-01",
+    updated: isoDate(data.updated),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
-    readingMinutes: readingTime(content),
+    readingMinutes: readingTime(words),
+    words,
     draft: Boolean(data.draft),
     generated: Boolean(data.generated),
   };
