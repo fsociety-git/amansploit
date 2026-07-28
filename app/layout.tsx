@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
+import { KeyboardHelp, ScrollProgress, SkipLink, ToastHost } from "@/components/Chrome";
 import { LINKS } from "@/lib/data";
 import "@fontsource/space-grotesk/500.css";
 import "@fontsource/space-grotesk/700.css";
@@ -38,13 +40,33 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // The CSP in proxy.ts is `script-src 'self' 'nonce-…'` with no 'unsafe-inline'
+  // — which is the whole reason this site grades A+. Any inline script we add
+  // ourselves therefore needs that same nonce, or the browser refuses to run it.
+  // proxy.ts puts it on the request headers precisely so a Server Component can
+  // read it back here.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        {children}
+        {/* Restore the motion preference before first paint, so a user who has
+            turned motion off never sees a frame of the thing they turned off. */}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var m=localStorage.getItem("motion");if(m)document.documentElement.dataset.motion=m;}catch(e){}',
+          }}
+        />
+        <SkipLink />
+        <ScrollProgress />
+        <ToastHost>
+          {children}
+          <KeyboardHelp />
+        </ToastHost>
         <Analytics />
         <script
           type="application/ld+json"

@@ -17,7 +17,23 @@ import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-const ParticleCanvas = dynamic(() => import("@/components/experience/ParticleCanvas"));
+const ParticleCanvas = dynamic(() => import("@/components/experience/ParticleCanvas"), {
+  // The WebGL bundle is large and the hero sits on a transparent body, so
+  // without this the first paint is flat black until three.js arrives. A static
+  // gradient in the same palette means the page opens looking deliberate rather
+  // than broken, and it costs nothing — no JS, no layout shift, and it is simply
+  // painted over once the canvas mounts.
+  loading: () => (
+    <div
+      aria-hidden
+      className="fixed inset-0 -z-10 bg-void"
+      style={{
+        backgroundImage:
+          "radial-gradient(ellipse 80% 60% at 50% 42%, rgba(45,224,179,0.10), transparent 70%), radial-gradient(ellipse 60% 50% at 78% 30%, rgba(24,140,178,0.10), transparent 72%)",
+      }}
+    />
+  ),
+});
 
 // Nonce-based CSP (proxy.ts) requires a per-request render — a statically
 // prerendered page has no request to mint a nonce for.
@@ -29,7 +45,7 @@ export default async function Home() {
       <ParticleCanvas />
       <HashScroll />
       <Nav />
-      <main className="flex-1">
+      <main id="content" className="flex-1">
         {/* ---- ACT I — cinematic opening over the particle morph ---- */}
         <ActOne />
 

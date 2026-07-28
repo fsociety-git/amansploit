@@ -1,6 +1,7 @@
 "use client";
 
 import Reveal from "./Reveal";
+import { CopyButton } from "./Chrome";
 import { BOOKING_URL, LINKS, WHATSAPP } from "@/lib/data";
 
 export default function Contact() {
@@ -28,6 +29,8 @@ export default function Contact() {
               {LINKS.email}
               <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
             </a>
+            {/* Not everyone wants their mail client to open. */}
+            <CopyButton value={LINKS.email} label="email address" className="sm:-ml-1" />
             <a
               href={`https://wa.me/${WHATSAPP}`}
               target="_blank"

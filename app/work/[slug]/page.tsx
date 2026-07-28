@@ -45,7 +45,7 @@ export default async function CaseStudyPage({
   return (
     <>
       <Nav />
-      <main className="flex-1 bg-void">
+      <main id="content" className="flex-1 bg-void">
         {/* header */}
         <header className="relative border-b border-line bg-grid">
           <div className="absolute inset-0 glow-acid" aria-hidden="true" />

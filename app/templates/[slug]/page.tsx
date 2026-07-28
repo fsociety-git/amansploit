@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <Nav />
-      <main className="flex-1 bg-void">
+      <main id="content" className="flex-1 bg-void">
         <div className="mx-auto max-w-3xl px-5 pt-32 pb-20">
           <Link href="/templates" className="font-mono text-xs text-dim hover:text-acid transition-colors">
             ← all templates

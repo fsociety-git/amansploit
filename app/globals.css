@@ -256,3 +256,25 @@ body {
     margin-top: 22px;
   }
 }
+
+/* Route transition — opacity only. See app/template.tsx for why nothing else. */
+@keyframes route-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.route-fade {
+  animation: route-fade-in 180ms ease-out both;
+}
+
+/* The in-UI motion toggle sets data-motion on <html>; honour it everywhere the
+   media query is honoured, so the switch is not decorative. */
+@media (prefers-reduced-motion: reduce) {
+  .route-fade { animation: none; }
+}
+html[data-motion="reduced"] .route-fade { animation: none; }
+html[data-motion="reduced"] * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

@@ -33,7 +33,7 @@ export default function NotFound() {
   return (
     <>
       <Nav />
-      <main className="flex-1 bg-void">
+      <main id="content" className="flex-1 bg-void">
         <div className="mx-auto max-w-3xl px-5 pt-32 pb-24">
           <div className="rounded-xl border border-line bg-panel/50 overflow-hidden">
             <div className="flex items-center gap-2 px-4 py-3 border-b border-line/70">

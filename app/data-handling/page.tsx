@@ -42,7 +42,7 @@ export default async function Page() {
   return (
     <>
       <Nav />
-      <main className="flex-1 bg-void">
+      <main id="content" className="flex-1 bg-void">
         <div className="mx-auto max-w-3xl px-5 pt-32 pb-20">
           <div className="kicker">// DATA HANDLING</div>
           <h1 className="mt-3 font-display font-bold text-4xl md:text-5xl tracking-tight">
