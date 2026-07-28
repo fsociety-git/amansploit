@@ -38,7 +38,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <Nav />
       <main id="content" className="flex-1 bg-void">
         <article className="mx-auto max-w-3xl px-5 pt-32 pb-16">
-          <Link href="/blog" className="font-mono text-xs text-dim hover:text-acid transition-colors">
+          <Link href="/blog" className="inline-block py-1.5 font-mono text-xs text-dim hover:text-acid transition-colors">
             ← all writing
           </Link>
 

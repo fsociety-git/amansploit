@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <Nav />
       <main id="content" className="flex-1 bg-void">
         <div className="mx-auto max-w-3xl px-5 pt-32 pb-20">
-          <Link href="/templates" className="font-mono text-xs text-dim hover:text-acid transition-colors">
+          <Link href="/templates" className="inline-block py-1.5 font-mono text-xs text-dim hover:text-acid transition-colors">
             ← all templates
           </Link>
           <h1 className="mt-8 font-display font-bold text-4xl tracking-tight">{t.title}</h1>

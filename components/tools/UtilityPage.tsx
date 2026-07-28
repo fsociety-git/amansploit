@@ -20,7 +20,7 @@ export default function UtilityPage({
       <Nav />
       <main id="content" className="flex-1 bg-void">
         <div className="mx-auto max-w-3xl px-5 pt-32 pb-20">
-          <Link href="/tools" className="font-mono text-xs text-dim hover:text-acid transition-colors">
+          <Link href="/tools" className="inline-block py-1.5 font-mono text-xs text-dim hover:text-acid transition-colors">
             ← all tools
           </Link>
           <div className="kicker mt-8">{kicker}</div>
