@@ -284,3 +284,20 @@ export const ORGS: Org[] = [
   { name: "Coventry University", mark: "CU", relationship: "Degree", detail: "BSc (Hons) Cybersecurity" },
   { name: "EC-Council University", mark: "ECU", relationship: "In progress", detail: "MSc Cyber Security" },
 ];
+
+/**
+ * Availability, computed rather than typed.
+ *
+ * This was hardcoded as "Q3 2026" — correct on the day it was written and
+ * quietly wrong about two months later, on the most prominent line of the
+ * homepage. A stale availability badge is worse than none: it tells a visitor
+ * the site is not maintained, which is a poor first claim from someone selling
+ * attention to detail.
+ *
+ * Rolls to the next quarter automatically. Called during a request-time render,
+ * so it reflects the day the page is served, not the day it was built.
+ */
+export function availabilityLabel(now: Date = new Date()): string {
+  const q = Math.floor(now.getUTCMonth() / 3) + 1;
+  return `Q${q} ${now.getUTCFullYear()}`;
+}

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import DecryptText from "./DecryptText";
 import Counter from "./Counter";
-import { CERTS, STATS } from "@/lib/data";
+import { CERTS, STATS, availabilityLabel } from "@/lib/data";
 
 /**
  * Act I — the cinematic opening.
@@ -102,7 +102,7 @@ export default function ActOne() {
           >
             <span className="pulse-dot h-2 w-2 rounded-full bg-acid" />
             <span className="font-mono text-xs text-dim">
-              AVAILABLE FOR ENGAGEMENTS — <span className="text-acid">Q3 2026</span>
+              AVAILABLE FOR ENGAGEMENTS — <span className="text-acid">{availabilityLabel()}</span>
             </span>
           </motion.div>
 
