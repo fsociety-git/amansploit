@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { formatDate, getPost, getPosts } from "@/lib/posts";
+import { formatDate, getPost, getPosts, getRelated } from "@/lib/posts";
 import { LINKS } from "@/lib/data";
 
 export async function generateStaticParams() {
@@ -31,8 +31,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const all = await getPosts();
-  const next = all.find((p) => p.slug !== post.slug);
+  const related = await getRelated(post.slug, 3);
 
   return (
     <>
@@ -52,6 +51,28 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {post.title}
           </h1>
           <p className="mt-4 text-lg text-dim leading-relaxed">{post.description}</p>
+
+          {/* Only worth showing when there is enough structure to navigate.
+              A contents list over three headings is furniture, not a tool. */}
+          {post.headings.filter((h) => h.level === 2).length >= 4 && (
+            <nav aria-label="On this page" className="mt-10 card-line rounded-xl p-5">
+              <div className="kicker mb-3">On this page</div>
+              <ol className="space-y-1.5">
+                {post.headings
+                  .filter((h) => h.level === 2)
+                  .map((h) => (
+                    <li key={h.id}>
+                      <a
+                        href={`#${h.id}`}
+                        className="text-[14px] text-dim hover:text-acid transition-colors leading-snug"
+                      >
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+              </ol>
+            </nav>
+          )}
 
           <div className="prose-sec mt-10" dangerouslySetInnerHTML={{ __html: post.html }} />
 
@@ -96,12 +117,21 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <div className="border-t border-line bg-panel/40">
           <div className="mx-auto max-w-3xl px-5 py-14 flex flex-col sm:flex-row gap-8 sm:items-center sm:justify-between">
-            {next && (
-              <div>
+            {related.length > 0 && (
+              <div className="flex-1">
                 <div className="font-mono text-xs text-dim uppercase tracking-wider">Read next</div>
-                <Link href={`/blog/${next.slug}`} className="mt-1 block font-display font-bold text-xl hover:text-acid transition-colors">
-                  {next.title} →
-                </Link>
+                <div className="mt-3 space-y-3">
+                  {related.map((r) => (
+                    <Link key={r.slug} href={`/blog/${r.slug}`} className="block group">
+                      <div className="font-display font-bold text-[17px] leading-snug group-hover:text-acid transition-colors">
+                        {r.title}
+                      </div>
+                      <p className="mt-0.5 text-[13px] text-dim leading-snug line-clamp-2">
+                        {r.description}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
             <a

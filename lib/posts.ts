@@ -34,8 +34,51 @@ export interface PostMeta {
   generated: boolean;
 }
 
+export interface Heading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
 export interface Post extends PostMeta {
   html: string;
+  headings: Heading[];
+}
+
+/**
+ * Pull the h2/h3 anchors back out of the rendered HTML.
+ *
+ * Parsed from the output rather than the markdown source because rehype-slug
+ * generates the ids, and a table of contents that computes its own slugs will
+ * drift from the ones actually on the page the first time a heading contains
+ * punctuation. Reading the real ids means the links cannot be wrong.
+ */
+function extractHeadings(html: string): Heading[] {
+  const out: Heading[] = [];
+  const re = /<h([23])[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    const text = m[3].replace(/<[^>]+>/g, "").trim();
+    if (text) out.push({ id: m[2], text, level: Number(m[1]) as 2 | 3 });
+  }
+  return out;
+}
+
+/**
+ * Posts sharing the most tags, newest first, excluding the current one.
+ * Falls back to recency when nothing overlaps, so the slot is never empty.
+ */
+export async function getRelated(slug: string, limit = 3): Promise<PostMeta[]> {
+  const all = await getPosts();
+  const self = all.find((p) => p.slug === slug);
+  if (!self) return all.slice(0, limit);
+  const tags = new Set(self.tags.map((t) => t.toLowerCase()));
+  return all
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({ p, score: p.tags.filter((t) => tags.has(t.toLowerCase())).length }))
+    .sort((a, b) => b.score - a.score || (a.p.date < b.p.date ? 1 : -1))
+    .slice(0, limit)
+    .map((x) => x.p);
 }
 
 function readingTime(md: string): number {
@@ -104,7 +147,8 @@ export async function getPost(slug: string): Promise<Post | null> {
   if (meta.draft && process.env.NODE_ENV === "production") return null;
 
   const { content } = matter(raw);
-  return { ...meta, html: await renderMarkdown(content) };
+  const html = await renderMarkdown(content);
+  return { ...meta, html, headings: extractHeadings(html) };
 }
 
 export function formatDate(d: string): string {

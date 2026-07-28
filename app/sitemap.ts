@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://amansploit.com/tools/cvss", lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "https://amansploit.com/tools/hash", lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "https://amansploit.com/blog", lastModified: now, changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/services/penetration-testing-india", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/fix", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/templates", lastModified: now, changeFrequency: "yearly" as const, priority: 0.7 },
     { url: "https://amansploit.com/templates/rules-of-engagement", lastModified: now, changeFrequency: "yearly" as const, priority: 0.7 },
