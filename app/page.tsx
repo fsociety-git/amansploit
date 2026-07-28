@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import Nav from "@/components/Nav";
 import ActOne from "@/components/ActOne";
 import ToolMarquee from "@/components/ToolMarquee";
+import Credibility from "@/components/Credibility";
 import Services from "@/components/Services";
 import CaseStudies from "@/components/CaseStudies";
 import Process from "@/components/Process";
@@ -35,6 +36,7 @@ export default async function Home() {
         {/* ---- ACT II — the pitch, in normal flow ---- */}
         <div className="relative z-10 bg-void/85 backdrop-blur-[2px] border-t border-line/60">
           <ToolMarquee />
+          <Credibility />
           <Services />
           <CaseStudies />
           <Process />

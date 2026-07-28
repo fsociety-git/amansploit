@@ -1,7 +1,7 @@
 "use client";
 
 import Reveal from "./Reveal";
-import { AFFILIATIONS, CREDENTIALS } from "@/lib/data";
+import { CREDENTIALS, ORGS } from "@/lib/data";
 
 /**
  * Trust without a face.
@@ -96,14 +96,13 @@ export default function WorkingWithMe() {
               <div className="font-mono text-xs text-dim uppercase tracking-wider mb-4">
                 Experience &amp; education
               </div>
-              <div className="flex flex-wrap gap-2">
-                {AFFILIATIONS.map((a) => (
-                  <span
-                    key={a}
-                    className="font-mono text-xs text-dim border border-line rounded-full px-3.5 py-1.5"
-                  >
-                    {a}
-                  </span>
+              <div className="space-y-2">
+                {ORGS.map((o) => (
+                  <div key={o.name} className="flex items-baseline gap-2 text-[15px]">
+                    <span className="text-acid">▸</span>
+                    <span className="text-ink">{o.name}</span>
+                    <span className="text-dim text-sm">— {o.detail}</span>
+                  </div>
                 ))}
               </div>
               <p className="mt-5 text-sm text-dim leading-relaxed">

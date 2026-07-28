@@ -252,3 +252,35 @@ export const AFFILIATIONS = [
   "EC-Council University",
   "PSB Academy",
 ];
+
+/**
+ * Organisations, with the relationship stated.
+ *
+ * Deliberately NOT labelled "trusted by". None of these are clients — they are
+ * an employer, an internship, two universities and a certifying body. A strip
+ * of institution names under a "trusted by" heading reads as a customer list,
+ * and on a site whose entire argument is that it doesn't overstate things, that
+ * would be the most expensive sentence on the page. Each entry carries its own
+ * relationship label so the claim is exactly true.
+ *
+ * `mark` is a typographic monogram rendered in the site's own fonts, not the
+ * organisation's logo. Shipping third-party trademark files on a commercial
+ * site needs permission nobody has asked for, and a set of mismatched logos
+ * looks like a scrapbook. A designed monogram set looks intentional and is
+ * entirely ours to use.
+ */
+export interface Org {
+  name: string;
+  mark: string;
+  relationship: string;
+  detail: string;
+}
+
+export const ORGS: Org[] = [
+  { name: "LTS", mark: "LTS", relationship: "Employer", detail: "Security Analyst — SOC tooling and automation" },
+  { name: "InLighnX Global", mark: "iX", relationship: "Internship", detail: "Offensive security — web, API, mobile, thick client" },
+  { name: "EC-Council", mark: "EC", relationship: "Certifying body", detail: "CEH Master · CND · ECSS" },
+  { name: "CompTIA", mark: "C+", relationship: "Certifying body", detail: "Security+" },
+  { name: "Coventry University", mark: "CU", relationship: "Degree", detail: "BSc (Hons) Cybersecurity" },
+  { name: "EC-Council University", mark: "ECU", relationship: "In progress", detail: "MSc Cyber Security" },
+];
