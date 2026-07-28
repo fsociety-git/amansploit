@@ -162,6 +162,8 @@ HARD RULES — violating any of these makes the post unusable and it will be dis
 Generic illustrative examples are fine and encouraged — "imagine an order API that filters after fetching" — as long as they are clearly hypothetical and not presented as something that happened.
 
 FORMAT
+Titles and headings use SENTENCE CASE, not Title Case. Write "What makes a security alert actionable", never "What Makes a Security Alert Actionable". Only proper nouns and acronyms keep their capitals. This matches the rest of the site and Title Case immediately looks machine-written next to it.
+
 Return ONLY a markdown document, no preamble and no code fence around the whole thing. Begin with YAML frontmatter exactly like:
 ---
 title: "..."

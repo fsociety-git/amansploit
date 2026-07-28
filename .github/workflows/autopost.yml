@@ -51,9 +51,11 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      # v4 of these still targets Node 20, which runners now force onto Node 24
+      # and warn about on every run. v5 targets Node 24 natively.
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
 
@@ -68,6 +70,18 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
         run: node scripts/generate-post.mjs
+
+      # A dry run that discards its own output is useless — the whole point is to
+      # read the post before deciding whether to trust the system. Upload it
+      # either way, so there is always a downloadable copy attached to the run.
+      - name: Upload the generated post
+        if: steps.gen.outputs.wrote == '1'
+        uses: actions/upload-artifact@v5
+        with:
+          name: post-${{ steps.gen.outputs.slug }}
+          path: content/posts/${{ steps.gen.outputs.slug }}.md
+          retention-days: 30
+          if-no-files-found: error
 
       - name: Commit and push
         if: steps.gen.outputs.wrote == '1' && inputs.dry_run != true
@@ -89,9 +103,15 @@ jobs:
         if: always()
         run: |
           if [ "${{ steps.gen.outputs.wrote }}" = "1" ]; then
-            echo "Published **${{ steps.gen.outputs.title }}**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "https://amansploit.com/blog/${{ steps.gen.outputs.slug }}" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ inputs.dry_run }}" = "true" ]; then
+              echo "Dry run — wrote **${{ steps.gen.outputs.title }}** but did not commit." >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Download it from the Artifacts section at the bottom of this page to read it." >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Published **${{ steps.gen.outputs.title }}**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "https://amansploit.com/blog/${{ steps.gen.outputs.slug }}" >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "No post written this run — see the generate step for the reason." >> $GITHUB_STEP_SUMMARY
           fi
