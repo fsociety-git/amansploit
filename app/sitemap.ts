@@ -18,6 +18,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://amansploit.com/tools/hash", lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "https://amansploit.com/blog", lastModified: now, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: "https://amansploit.com/fix", lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/templates", lastModified: now, changeFrequency: "yearly" as const, priority: 0.7 },
+    { url: "https://amansploit.com/templates/rules-of-engagement", lastModified: now, changeFrequency: "yearly" as const, priority: 0.7 },
+    { url: "https://amansploit.com/templates/nda", lastModified: now, changeFrequency: "yearly" as const, priority: 0.7 },
+    { url: "https://amansploit.com/transparency", lastModified: now, changeFrequency: "weekly" as const, priority: 0.5 },
     { url: "https://amansploit.com/data-handling", lastModified: now, changeFrequency: "yearly" as const, priority: 0.6 },
     ...posts.map((p) => ({
       url: `https://amansploit.com/blog/${p.slug}`,

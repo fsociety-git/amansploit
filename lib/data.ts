@@ -1,6 +1,10 @@
 export const LINKS = {
   email: "aman.s.732002@gmail.com",
   linkedin: "https://www.linkedin.com/in/aman-sonkamble",
+  github: "https://github.com/fsociety-git",
+  // The source of this site. Publishing it is the point: a security engineer
+  // whose own site can be read line by line is making a checkable claim.
+  repo: "https://github.com/fsociety-git/amansploit",
   location: "Pune, India · Remote worldwide",
 };
 

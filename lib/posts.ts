@@ -77,6 +77,20 @@ export async function getPosts(): Promise<PostMeta[]> {
   return out.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+/** Shared markdown → HTML pipeline. Used by posts and by the changelog. */
+export async function renderMarkdown(md: string): Promise<string> {
+  return String(
+    await unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(remarkRehype)
+      .use(rehypeSlug)
+      .use(rehypeHighlight, { detect: true })
+      .use(rehypeStringify)
+      .process(md),
+  );
+}
+
 export async function getPost(slug: string): Promise<Post | null> {
   // guard against traversal — slug comes from the URL
   if (!/^[a-z0-9-]+$/i.test(slug)) return null;
@@ -90,18 +104,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   if (meta.draft && process.env.NODE_ENV === "production") return null;
 
   const { content } = matter(raw);
-  const html = String(
-    await unified()
-      .use(remarkParse)
-      .use(remarkGfm)
-      .use(remarkRehype)
-      .use(rehypeSlug)
-      .use(rehypeHighlight, { detect: true })
-      .use(rehypeStringify)
-      .process(content),
-  );
-
-  return { ...meta, html };
+  return { ...meta, html: await renderMarkdown(content) };
 }
 
 export function formatDate(d: string): string {

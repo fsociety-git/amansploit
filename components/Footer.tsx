@@ -11,6 +11,8 @@ export default function Footer() {
         <div className="flex items-center gap-6 font-mono text-xs text-dim">
           <a href={`mailto:${LINKS.email}`} className="hover:text-acid transition-colors">email</a>
           <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-acid transition-colors">linkedin</a>
+          <a href={LINKS.repo} target="_blank" rel="noopener noreferrer" className="hover:text-acid transition-colors">source</a>
+          <a href="/transparency" className="hover:text-acid transition-colors">transparency</a>
           <a href="/data-handling" className="hover:text-acid transition-colors">data handling</a>
           <a href="/.well-known/security.txt" className="hover:text-acid transition-colors">security.txt</a>
         </div>
