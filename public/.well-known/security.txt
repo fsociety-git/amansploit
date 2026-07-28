@@ -1,5 +1,29 @@
 Contact: mailto:aman.s.732002@gmail.com
+Contact: https://amansploit.com/#contact
+Encryption: https://amansploit.com/pgp-key.txt
 Preferred-Languages: en
 Canonical: https://amansploit.com/.well-known/security.txt
+Policy: https://amansploit.com/data-handling
 Expires: 2027-12-31T23:59:59.000Z
+
 # Found something on this site? Responsible disclosure welcome — that's the job.
+#
+# PGP fingerprint, so you can check the key you downloaded is the key I published:
+#   2370 2E4B C735 C27D D64B  B3AE 3CA1 6770 D607 85C3
+#   ed25519 [SC] with a cv25519 [E] subkey, expires 2028-07-27.
+#
+# There is no bounty. There is a fast reply, a fix, and public credit if you
+# want it. Please give me a reasonable window before publishing.
+#
+# In scope:     amansploit.com and its subdomains, including the free tools
+#               at /tools and the API endpoints they call.
+# Out of scope: findings against the hosting provider's edge, automated
+#               scanner output with no demonstrated impact, missing headers
+#               documented as deliberate, and anything requiring physical
+#               access or social engineering.
+#
+# The tools at /tools accept a user-supplied target and fetch it server-side,
+# which makes them the interesting attack surface here. lib/safe-url.ts is the
+# guard: scheme allowlist, private/loopback/link-local/CGNAT/metadata ranges
+# blocked, redirects re-validated, response bodies never read. If you get past
+# it, I want to hear about that more than anything else on this domain.

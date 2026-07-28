@@ -9,6 +9,7 @@ import Process from "@/components/Process";
 import Packages from "@/components/Packages";
 import Estimator from "@/components/Estimator";
 import WorkingWithMe from "@/components/WorkingWithMe";
+import SelfScan from "@/components/SelfScan";
 import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
@@ -39,6 +40,7 @@ export default async function Home() {
           <Estimator />
           <Testimonials />
           <WorkingWithMe />
+          <SelfScan />
           <About />
         </div>
 
