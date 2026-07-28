@@ -10,6 +10,7 @@ import Packages from "@/components/Packages";
 import Estimator from "@/components/Estimator";
 import WorkingWithMe from "@/components/WorkingWithMe";
 import SelfScan from "@/components/SelfScan";
+import HashScroll from "@/components/HashScroll";
 import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
@@ -25,6 +26,7 @@ export default async function Home() {
   return (
     <>
       <ParticleCanvas />
+      <HashScroll />
       <Nav />
       <main className="flex-1">
         {/* ---- ACT I — cinematic opening over the particle morph ---- */}

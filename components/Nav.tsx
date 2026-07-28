@@ -8,6 +8,10 @@ const ITEMS = [
   { id: "services", label: "Services" },
   { id: "work", label: "Work" },
   { id: "process", label: "Process" },
+  // The live self-scan is the only section that proves rather than asserts, and
+  // it sits second-from-last on a very long page. Without a nav entry, nobody
+  // who isn't already scrolling to the bottom will ever see it.
+  { id: "self-scan", label: "Proof" },
   { id: "about", label: "About" },
 ];
 

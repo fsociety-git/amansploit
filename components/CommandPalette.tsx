@@ -28,6 +28,8 @@ export default function CommandPalette({
     { label: "goto services", hint: "What I do", action: () => go("services") },
     { label: "goto work", hint: "Case studies", action: () => go("work") },
     { label: "goto process", hint: "How engagements run", action: () => go("process") },
+    { label: "goto proof", hint: "Live self-scan of this domain", action: () => go("self-scan") },
+    { label: "goto pricing", hint: "Packages and estimator", action: () => go("estimate") },
     { label: "goto about", hint: "Who I am", action: () => go("about") },
     { label: "goto contact", hint: "Start a project", action: () => go("contact") },
     { label: "free tools", hint: "Headers + email spoofing", action: () => { window.location.href = "/tools"; } },
