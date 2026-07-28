@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LINKS, WHATSAPP } from "@/lib/data";
-import { EmailResult, HeadersResult } from "./Results";
+import { EmailResult, HeadersResult, SurfaceResult } from "./Results";
 
 export default function ToolShell({
   title,
@@ -21,7 +21,7 @@ export default function ToolShell({
   placeholder: string;
   endpoint: string;
   cta: string;
-  variant: "headers" | "email";
+  variant: "headers" | "email" | "surface";
   /**
    * Explanatory content rendered below the tool. A page that is only a form has
    * nothing for a search engine to rank and nothing for a visitor who arrived
@@ -102,7 +102,7 @@ export default function ToolShell({
           </div>
         )}
 
-        {state === "done" && data && Boolean(data.blocked || data.inconclusive) && (
+        {state === "done" && data && variant !== "surface" && Boolean(data.blocked || data.inconclusive) && (
           <div className="mt-8 card-line rounded-xl p-6 border-yellow-500/40">
             <div className="kicker mb-2 text-yellow-400">Inconclusive</div>
             <p className="text-[15px] text-ink leading-relaxed">{typeof data.error === "string" ? data.error : "This check could not be completed."}</p>
@@ -112,42 +112,15 @@ export default function ToolShell({
           </div>
         )}
 
-        {state === "done" && data && !Boolean(data.blocked || data.inconclusive) && (
+        {state === "done" && data && (variant === "surface" || !Boolean(data.blocked || data.inconclusive)) && (
           <div className="mt-10">
-            {variant === "headers" ? <HeadersResult d={data} /> : <EmailResult d={data} />}
-          </div>
-        )}
-
-        {state === "done" && (
-          <div className="mt-12 card-line rounded-xl p-6">
-            <h2 className="font-display font-bold text-xl">Want the rest of the picture?</h2>
-            <p className="mt-2 text-[15px] text-dim leading-relaxed">
-              This checks one thin slice from the outside. A real assessment looks at
-              authentication, access control, business logic, and the things a scanner
-              cannot reach. Fixed price, report included, retest free.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href={`https://wa.me/${WHATSAPP}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg bg-acid text-void font-semibold px-5 py-2.5 hover:bg-acid/85 transition-colors"
-              >
-                Talk it through
-              </a>
-              <Link
-                href="/#estimate"
-                className="rounded-lg border border-line text-ink font-medium px-5 py-2.5 hover:border-acid/50 hover:text-acid transition-colors"
-              >
-                Estimate my scope
-              </Link>
-              <a
-                href={`mailto:${LINKS.email}`}
-                className="rounded-lg border border-line text-ink font-medium px-5 py-2.5 hover:border-acid/50 hover:text-acid transition-colors"
-              >
-                Email me
-              </a>
-            </div>
+            {variant === "headers" ? (
+              <HeadersResult d={data} />
+            ) : variant === "surface" ? (
+              <SurfaceResult d={data} />
+            ) : (
+              <EmailResult d={data} />
+            )}
           </div>
         )}
 

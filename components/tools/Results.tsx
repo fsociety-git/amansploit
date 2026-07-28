@@ -218,3 +218,117 @@ export function EmailResult({ d }: { d: Record<string, unknown> }) {
     </div>
   );
 }
+
+interface SurfaceRow {
+  host: string;
+  state: "live" | "dead" | "unknown";
+  addr?: string;
+  note?: string;
+}
+
+export function SurfaceResult({ d }: { d: Record<string, unknown> }) {
+  const rows = (d.results ?? []) as SurfaceRow[];
+  const domain = String(d.domain);
+  const notable = rows.filter((r) => r.state === "live" && r.note);
+  const live = rows.filter((r) => r.state === "live" && !r.note);
+  const rest = rows.filter((r) => r.state !== "live");
+
+  if (d.inconclusive) {
+    return (
+      <div>
+        <div className="card-line rounded-xl p-7">
+          <div className="font-mono text-xs tracking-[0.2em] text-yellow-400">INCONCLUSIVE</div>
+          <p className="mt-3 text-lg text-ink leading-relaxed">{String(d.headline)}</p>
+        </div>
+        <NextStep severity="unknown" offerSlug="attack-surface" />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className={`card-line rounded-xl p-7 ${notable.length ? "border-yellow-500/40" : ""}`}>
+        <div className="font-mono text-xs tracking-[0.2em] text-dim">EXPOSED SURFACE</div>
+        <p className="mt-3 text-lg text-ink leading-relaxed">{String(d.headline)}</p>
+        <div className="mt-2 font-mono text-xs text-dim">{domain}</div>
+      </div>
+
+      <PrintButton />
+
+      <div className="mt-5 grid sm:grid-cols-3 gap-3">
+        {[
+          { n: "In the logs", v: String(d.totalNames), s: "hostnames ever certified" },
+          { n: "Still resolving", v: String(d.liveCount), s: `of ${String(d.checkedCount)} checked` },
+          { n: "Worth a look", v: String(d.notableCount), s: "by name alone" },
+        ].map((x) => (
+          <div key={x.n} className="card-line rounded-xl p-4">
+            <div className="font-mono text-[11px] text-dim uppercase tracking-wider">{x.n}</div>
+            <div className="mt-1 font-display font-bold text-2xl text-acid">{x.v}</div>
+            <div className="font-mono text-[11px] text-dim">{x.s}</div>
+          </div>
+        ))}
+      </div>
+
+      {notable.length > 0 && (
+        <div className="mt-5 card-line rounded-xl p-5 border-yellow-500/30">
+          <div className="kicker mb-3 text-yellow-400">Worth a closer look</div>
+          <div className="space-y-3">
+            {notable.map((r) => (
+              <div key={r.host}>
+                <div className="flex flex-wrap items-baseline gap-x-3">
+                  <span className="font-mono text-[13px] text-ink break-all">{r.host}</span>
+                  {r.addr && <span className="font-mono text-[11px] text-dim">{r.addr}</span>}
+                </div>
+                <p className="mt-0.5 text-[13px] text-dim leading-relaxed">{r.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {live.length > 0 && (
+        <div className="mt-5 card-line rounded-xl p-5">
+          <div className="kicker mb-3">Also resolving</div>
+          <div className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
+            {live.map((r) => (
+              <div key={r.host} className="flex items-baseline justify-between gap-3">
+                <span className="font-mono text-[12px] text-dim break-all">{r.host}</span>
+                <span className="font-mono text-[11px] text-dim/60 shrink-0">{r.addr}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <div className="mt-5 card-line rounded-xl p-5">
+          <div className="kicker mb-2">Certified but not resolving</div>
+          <p className="text-sm text-dim leading-relaxed">
+            {rest.filter((r) => r.state === "dead").length} names appear in the logs but have no
+            DNS record today — usually decommissioned, sometimes just moved internal.
+            {rest.some((r) => r.state === "unknown") &&
+              ` ${rest.filter((r) => r.state === "unknown").length} could not be resolved either way and are not counted as gone.`}
+          </p>
+        </div>
+      )}
+
+      {Boolean(d.truncated) && (
+        <p className="mt-4 text-[13px] text-dim leading-relaxed">
+          Only the first {String(d.checkedCount)} of {String(d.totalNames)} names were resolved,
+          to keep the check quick. The rest are in the public logs and a full review would cover
+          all of them.
+        </p>
+      )}
+
+      <NextStep
+        severity={notable.length ? "middling" : "good"}
+        offerSlug="attack-surface"
+        problem={
+          notable.length
+            ? `${notable.length} hostnames under ${domain} carry names that suggest admin panels, non-production environments or internal tooling — and they resolve from the public internet. This check reads names only; it does not look at what they actually serve.`
+            : undefined
+        }
+      />
+    </div>
+  );
+}

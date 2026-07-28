@@ -19,6 +19,12 @@ export const TOOLS_LIST = [
     tag: "SPF · DKIM · DMARC",
   },
   {
+    href: "/tools/attack-surface",
+    name: "What the internet can see",
+    desc: "Finds every subdomain ever issued a certificate from public transparency logs, checks which still resolve, and flags the ones whose names suggest admin panels or forgotten staging environments.",
+    tag: "subdomains \u00b7 attack surface",
+  },
+  {
     href: "/tools/security-headers",
     name: "Security headers checker",
     desc: "Grades your HTTP response headers — CSP, HSTS, frame protection and more — and gives you the exact values to set.",
