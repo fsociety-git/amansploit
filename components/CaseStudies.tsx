@@ -18,7 +18,7 @@ export default function CaseStudies() {
         <div className="mt-14 space-y-6">
           {CASES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.05}>
-              <Link href={`/work/${c.slug}`} className="block">
+              <Link href={`/work/${c.slug}`} prefetch={false} className="block">
               <article className="card-line card-hover rounded-xl p-7 md:p-9 grid md:grid-cols-[1fr_1.6fr] gap-7">
                 <div>
                   <div className="kicker">{c.kicker}</div>

@@ -38,7 +38,7 @@ export default async function BlogIndex() {
           ) : (
             <div className="mt-12 space-y-4">
               {posts.map((p) => (
-                <Link key={p.slug} href={`/blog/${p.slug}`} className="block card-line card-hover rounded-xl p-6">
+                <Link key={p.slug} href={`/blog/${p.slug}`} prefetch={false} className="block card-line card-hover rounded-xl p-6">
                   <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] text-dim">
                     <time dateTime={p.date}>{formatDate(p.date)}</time>
                     <span>·</span>

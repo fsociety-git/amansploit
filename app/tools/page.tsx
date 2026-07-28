@@ -81,7 +81,7 @@ export default async function ToolsPage() {
 
           <div className="mt-10 space-y-4">
             {TOOLS_LIST.map((t) => (
-              <Link key={t.href} href={t.href} className="block card-line card-hover rounded-xl p-6">
+              <Link key={t.href} href={t.href} prefetch={false} className="block card-line card-hover rounded-xl p-6">
                 <div className="kicker">{t.tag}</div>
                 <h2 className="mt-2 font-display font-bold text-xl">{t.name}</h2>
                 <p className="mt-2 text-[15px] text-dim leading-relaxed">{t.desc}</p>
