@@ -13,6 +13,7 @@ export default function ToolShell({
   endpoint,
   cta,
   variant,
+  children,
 }: {
   title: string;
   kicker: string;
@@ -21,6 +22,12 @@ export default function ToolShell({
   endpoint: string;
   cta: string;
   variant: "headers" | "email";
+  /**
+   * Explanatory content rendered below the tool. A page that is only a form has
+   * nothing for a search engine to rank and nothing for a visitor who arrived
+   * with a question rather than a domain to test.
+   */
+  children?: React.ReactNode;
 }) {
   const [target, setTarget] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -143,6 +150,8 @@ export default function ToolShell({
             </div>
           </div>
         )}
+
+        {children}
       </div>
     </main>
   );

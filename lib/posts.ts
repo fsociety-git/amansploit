@@ -16,6 +16,8 @@ import rehypeStringify from "rehype-stringify";
  *
  * Frontmatter:
  *   title, description, date (YYYY-MM-DD), tags: [a, b], draft: true|false
+ *   generated: true   — written by scripts/generate-post.mjs on a schedule.
+ *                       The post page renders a disclosure note when this is set.
  */
 
 const DIR = path.join(process.cwd(), "content", "posts");
@@ -28,6 +30,8 @@ export interface PostMeta {
   tags: string[];
   readingMinutes: number;
   draft: boolean;
+  /** Drafted by the scheduled generator rather than typed by hand. Disclosed on the page. */
+  generated: boolean;
 }
 
 export interface Post extends PostMeta {
@@ -57,6 +61,7 @@ function toMeta(file: string, raw: string): PostMeta {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     readingMinutes: readingTime(content),
     draft: Boolean(data.draft),
+    generated: Boolean(data.generated),
   };
 }
 

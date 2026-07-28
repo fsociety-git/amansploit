@@ -55,6 +55,29 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
           <div className="prose-sec mt-10" dangerouslySetInnerHTML={{ __html: post.html }} />
 
+          {/* Disclosure. Cheaper to say it than to have someone work it out. */}
+          {post.generated && (
+            <aside className="mt-12 rounded-lg border border-line bg-panel/40 p-5">
+              <div className="font-mono text-[11px] uppercase tracking-wider text-dim">
+                How this post was written
+              </div>
+              <p className="mt-2 text-sm text-dim leading-relaxed">
+                This is a scheduled explainer — drafted by a model I run against a fixed
+                brief, published without a human pass. It explains mechanics only: it makes
+                no claim about engagements I have run, no claim about any named company, and
+                no claim about a specific vulnerability or event it cannot verify.{" "}
+                <strong className="text-ink font-semibold">
+                  The reports and assessments I sell are written by me, by hand.
+                </strong>{" "}
+                If anything here is wrong,{" "}
+                <a href={`mailto:${LINKS.email}?subject=Correction`} className="text-acid hover:underline">
+                  tell me
+                </a>{" "}
+                and I will fix or pull it.
+              </p>
+            </aside>
+          )}
+
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{

@@ -44,6 +44,7 @@ export default async function BlogIndex() {
                     <span>·</span>
                     <span>{p.readingMinutes} min read</span>
                     {p.draft && <span className="text-yellow-400">· draft</span>}
+                    {p.generated && <span title="Scheduled explainer, published unreviewed">· scheduled</span>}
                   </div>
                   <h2 className="mt-2 font-display font-bold text-xl leading-snug">{p.title}</h2>
                   <p className="mt-2 text-[15px] text-dim leading-relaxed">{p.description}</p>

@@ -1,0 +1,97 @@
+# Scheduled writing — CURRENTLY DISABLED ON PURPOSE.
+#
+# The daily schedule is commented out below. Aman writes the blog from reviewed
+# weekly drafts instead, which go out in his own voice with no "generated"
+# banner. This workflow stays in the repo as a fallback: if the blog ever goes
+# quiet for a few months, uncomment the `schedule` block and it resumes
+# publishing on its own. It still runs on demand from the Actions tab.
+#
+# If it produces a post that passes every validation check, the post is
+# committed to main and Vercel redeploys.
+# If anything at all is off — API down, output too short, integrity check
+# tripped, duplicate slug — the script exits 0 without writing a file and
+# this job finishes green having committed nothing. Silence is the safe
+# outcome; a bad post under your name is not.
+#
+# COST: nothing. Two free things are doing the work here —
+#   · GitHub Actions minutes (free on public repos)
+#   · GitHub Models, called with the GITHUB_TOKEN that Actions mints for every
+#     run. That is what `permissions: models: read` below unlocks. There is no
+#     secret to add and no card on file.
+#
+# If you ever want to use Claude instead, add ANTHROPIC_API_KEY as a repository
+# secret and the script switches automatically. Nothing else changes.
+
+name: autopost
+
+on:
+  # Uncomment to resume automatic daily publishing.
+  # schedule:
+  #   # 03:30 UTC daily = 09:00 IST. Cron here is always UTC.
+  #   - cron: "30 3 * * *"
+  workflow_dispatch:
+    # Lets you run it by hand from the Actions tab to test.
+    inputs:
+      dry_run:
+        description: "Generate but do not commit"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # to push the new post
+  models: read # to call GitHub Models for free with the built-in token
+
+concurrency:
+  group: autopost
+  cancel-in-progress: false
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate a post
+        id: gen
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional. Set as a repository *variable* to pin or reorder models,
+          # e.g. "openai/gpt-4.1,openai/gpt-4o". Falls through the list on 404.
+          AUTOPOST_MODEL: ${{ vars.AUTOPOST_MODEL }}
+          # Optional. Only set this if you decide to pay for Claude instead.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+        run: node scripts/generate-post.mjs
+
+      - name: Commit and push
+        if: steps.gen.outputs.wrote == '1' && inputs.dry_run != true
+        # POST_TITLE goes through env, never ${{ }} interpolation into the shell:
+        # it is model output, and interpolation would make it executable.
+        env:
+          POST_TITLE: ${{ steps.gen.outputs.title }}
+        run: |
+          git config user.name  "amansploit-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/posts
+          # Second guard: if the working tree is somehow clean, stop rather than
+          # push an empty commit.
+          git diff --cached --quiet && { echo "nothing staged"; exit 0; }
+          git commit -m "post: $POST_TITLE"
+          git push
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.gen.outputs.wrote }}" = "1" ]; then
+            echo "Published **${{ steps.gen.outputs.title }}**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "https://amansploit.com/blog/${{ steps.gen.outputs.slug }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No post written this run — see the generate step for the reason." >> $GITHUB_STEP_SUMMARY
+          fi
