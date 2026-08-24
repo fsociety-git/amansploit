@@ -5,14 +5,15 @@ import DecryptText from "./DecryptText";
 
 const WHOAMI = [
   "> whoami",
-  "Aman Sonkamble — Security Analyst by day, freelance builder always.",
+  "Aman Sonkamble — offensive security background, builds the things he breaks.",
   "",
   "> specialties",
   "offensive security · security automation · secure full-stack · applied AI/ML",
   "",
   "> current",
-  "Building multi-client SOC tooling. Top 1% on TryHackMe. On the AWS",
-  "cloud-security track. Shipping software that assumes it will be attacked.",
+  "Independent. Building secure web applications, automation and security",
+  "tooling. Top 1% on TryHackMe. Shipping software that assumes it will be",
+  "attacked.",
   "",
   "> philosophy",
   "Certs open doors. Evidence gets you hired. Everything I claim, I can show.",

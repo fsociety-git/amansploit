@@ -277,7 +277,7 @@ export interface Org {
 }
 
 export const ORGS: Org[] = [
-  { name: "LTS", mark: "LTS", relationship: "Employer", detail: "Security Analyst — SOC tooling and automation" },
+  { name: "LTS", mark: "LTS", relationship: "Former employer", detail: "Security Analyst, 2026 — SOC tooling and automation" },
   { name: "InLighnX Global", mark: "iX", relationship: "Internship", detail: "Offensive security — web, API, mobile, thick client" },
   { name: "EC-Council", mark: "EC", relationship: "Certifying body", detail: "CEH Master · CND · ECSS" },
   { name: "CompTIA", mark: "C+", relationship: "Certifying body", detail: "Security+" },
