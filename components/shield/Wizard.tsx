@@ -34,7 +34,7 @@ export default function Wizard({ s, locale }: { s: Dict; locale: "en" | "hi" }) 
     setBusy(true);
     setError("");
     try {
-      const res = await fetch("/api/cases", {
+      const res = await fetch("/api/shield/cases", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -43,9 +43,15 @@ export default function Wizard({ s, locale }: { s: Dict; locale: "en" | "hi" }) 
           locale, consent,
         }),
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? "Something went wrong.");
+      // A non-JSON body means we did not reach the API at all — a wrong path, a
+      // proxy error page, a 502. Reporting that as "network problem" sends the
+      // user off to check their wifi while the actual fault is server-side and
+      // invisible. Say which it was.
+      let json: { id?: string; manageKey?: string; error?: string } | null = null;
+      try { json = await res.json(); } catch { json = null; }
+
+      if (!res.ok || !json) {
+        setError(json?.error ?? `The server returned an unexpected response (HTTP ${res.status}). Please try again — if it keeps happening, the tool is broken, not you.`);
         setBusy(false);
         return;
       }
