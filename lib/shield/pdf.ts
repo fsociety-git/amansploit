@@ -164,7 +164,12 @@ export async function buildEvidencePack(
 
   // ---------- extracted profile data ----------
   const meta = artifacts.find((a) => a.kind === "metadata")?.meta;
-  if (meta) {
+  // Only print the section if at least one field actually carries a value. A
+  // heading followed by nothing reads as a failed capture.
+  const hasMeta = meta && Object.entries(meta).some(
+    ([k, v]) => !["url", "handle", "platform", "capturedAt", "httpStatus"].includes(k) && v,
+  );
+  if (hasMeta && meta) {
     heading("3.  Profile data extracted at capture");
     for (const [k, label] of [
       ["title", "Profile title"], ["description", "Profile description"],

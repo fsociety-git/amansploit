@@ -14,7 +14,7 @@ export default async function Manage({ params }: { params: Promise<{ id: string 
 
   const s: Record<string, string> = {
     ...Object.fromEntries(
-      ["title","checklist","c_evidence","c_verified","c_meta","c_friends","c_complaint",
+      ["title","checklist","c_evidence","c_verified","c_meta","c_friends","c_complaint","c_grievance",
        "shareTitle","shareD","keepSecret","ladder","drafts","day","dayN","openDraft",
        "copy","checkFirst","evidence","capture","capturing","captureBlocked","captureOk",
        "upload","uploading","uploadHint","artifacts_one","artifacts_other","story","storyHint",

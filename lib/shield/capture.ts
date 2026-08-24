@@ -85,6 +85,15 @@ export async function captureProfile(platform: string, handle: string): Promise<
     posts: counts?.[3] ?? null,
   };
 
+  // Instagram now serves a 600KB client-rendered shell to servers, with no og:
+  // tags at all — a 200 response carrying no profile data. Filing a metadata
+  // artifact where every field is null puts an empty "profile data" table in an
+  // evidence pack, which reads as a capture that failed rather than one that was
+  // withheld. The HTML is still worth keeping: it is what the URL served at a
+  // known instant, hashed, and it evidences that the account existed and
+  // responded. The empty derivative is not.
+  const gotAnything = Boolean(title || desc || image || counts);
+
   const htmlBuf = Buffer.from(html, "utf8");
   const metaBuf = Buffer.from(JSON.stringify(extracted, null, 2), "utf8");
 
@@ -101,13 +110,15 @@ export async function captureProfile(platform: string, handle: string): Promise<
         contentType: "text/html",
         meta: { url, capturedAt, httpStatus: res.status, bytes: htmlBuf.length },
       },
-      {
-        kind: "metadata",
-        bytes: metaBuf,
-        sha256: sha256(metaBuf),
-        contentType: "application/json",
-        meta: extracted,
-      },
+      ...(gotAnything
+        ? [{
+            kind: "metadata" as const,
+            bytes: metaBuf,
+            sha256: sha256(metaBuf),
+            contentType: "application/json",
+            meta: extracted,
+          }]
+        : []),
     ],
   };
 }
