@@ -17,6 +17,8 @@ export default function ManageDash({ id, s, siteUrl }: { id: string; s: Dict; si
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(false);
   const [verifyMsg, setVerifyMsg] = useState("");
+  const [offerReview, setOfferReview] = useState(false);
+  const [reviewSent, setReviewSent] = useState(false);
   const [copied, setCopied] = useState("");
   const [events, setEvents] = useState<string[]>([]);
   const [artifactCount, setArtifactCount] = useState(0);
@@ -54,11 +56,18 @@ export default function ManageDash({ id, s, siteUrl }: { id: string; s: Dict; si
     if (json.ok) { setVerifyMsg(""); void load(key); return; }
     // "we could not check" is reported differently from "we checked and it
     // wasn't there" — a victim who did everything right must not be told they failed.
-    setVerifyMsg(
-      json.reason === "not_found"
-        ? s.failed.replace("{handle}", `@${row?.real_handle ?? ""}`)
-        : "We couldn't reach the platform to check just now. This happens — wait a minute and try again.",
-    );
+    // "indeterminate" means the platform withheld the profile text, so we never
+    // actually looked. Saying "we couldn't find your code" there accuses a real
+    // victim of not doing something they did.
+    if (json.reason === "indeterminate" || json.reason === "blocked") {
+      setVerifyMsg(s.indeterminate);
+      setOfferReview(true);
+    } else if (json.reason === "not_found") {
+      setVerifyMsg(s.failed.replace("{handle}", `@${row?.real_handle ?? ""}`));
+      setOfferReview(true);
+    } else {
+      setVerifyMsg("We couldn't reach the platform to check just now. Wait a minute and try again.");
+    }
   }
 
   const copy = async (text: string, tag: string) => {
@@ -104,26 +113,53 @@ export default function ManageDash({ id, s, siteUrl }: { id: string; s: Dict; si
           <h2 className="font-display font-bold text-[17px]">{s.vTitle}</h2>
           <p className="mt-2 text-[15px] leading-relaxed text-dim">{s.vSub}</p>
 
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-wider text-dim">{s.codeLabel}</p>
-          <button onClick={() => copy(row.verification_code, "code")}
-            className="tap mt-1 w-full rounded-xl border border-line bg-panel/60 px-4 py-3 font-mono text-[17px] text-acid">
-            {copied === "code" ? s.copied : row.verification_code}
-          </button>
+          {/* Human review leads. The automated route is offered second and
+              honestly described, because Instagram returns an empty body to
+              server-side requests — so telling a frightened person to edit their
+              bio and then reporting that we "couldn't find" the code accuses
+              them of failing at something that was never possible. */}
+          {!reviewSent ? (
+            <div className="mt-5 rounded-xl border border-acid/35 bg-acid/[0.05] p-4">
+              <p className="text-[14px] leading-relaxed text-dim">
+                {s.reviewPrimaryD.replace("{handle}", `@${row.real_handle ?? ""}`)}
+              </p>
+              <button
+                onClick={async () => {
+                  if (!key) return;
+                  await fetch(`/api/shield/cases/${id}/review`, {
+                    method: "POST", headers: { "content-type": "application/json" },
+                    body: JSON.stringify({ key }),
+                  });
+                  setReviewSent(true);
+                }}
+                className="tap mt-3 w-full rounded-xl bg-acid px-6 py-3.5 font-semibold text-void"
+              >
+                {s.reviewPrimary}
+              </button>
+            </div>
+          ) : (
+            <p className="mt-5 rounded-xl border border-acid/30 bg-acid/[0.05] px-4 py-3 text-[14px] leading-relaxed text-ink">
+              {s.reviewSent.replace("{handle}", `@${row.real_handle ?? ""}`)}
+            </p>
+          )}
 
-          <p className="mt-4 text-[15px] leading-relaxed text-dim">
-            {s.how.replace("{handle}", `@${row.real_handle ?? ""}`)}
-          </p>
-
-          <button onClick={verify} disabled={checking}
-            className="tap mt-4 w-full rounded-xl bg-acid px-6 py-3.5 font-semibold text-void disabled:opacity-50">
-            {checking ? s.checking.replace("{handle}", `@${row.real_handle ?? ""}`) : s.check}
-          </button>
-
-          {verifyMsg && <p className="mt-3 text-[14px] leading-relaxed text-[#ff8a8a]">{verifyMsg}</p>}
-
-          <p className="mt-5 border-t border-line pt-4 text-[13px] leading-relaxed text-dim">
-            <strong className="text-ink">{s.manual}</strong> {s.manualD}
-          </p>
+          <details className="mt-5 border-t border-line pt-4">
+            <summary className="cursor-pointer font-mono text-[12px] uppercase tracking-wider text-dim">
+              {s.autoTitle}
+            </summary>
+            <p className="mt-3 text-[14px] leading-relaxed text-dim">
+              {s.autoD.replace("{handle}", `@${row.real_handle ?? ""}`)}
+            </p>
+            <button onClick={() => copy(row.verification_code, "code")}
+              className="tap mt-3 w-full rounded-xl border border-line bg-panel/60 px-4 py-3 font-mono text-[17px] text-acid">
+              {copied === "code" ? s.copied : row.verification_code}
+            </button>
+            <button onClick={verify} disabled={checking}
+              className="tap mt-3 w-full rounded-xl border border-acid/50 px-6 py-3 font-semibold text-acid disabled:opacity-50">
+              {checking ? s.checking.replace("{handle}", `@${row.real_handle ?? ""}`) : s.check}
+            </button>
+            {verifyMsg && <p className="mt-3 text-[14px] leading-relaxed text-warn">{verifyMsg}</p>}
+          </details>
         </section>
       )}
 

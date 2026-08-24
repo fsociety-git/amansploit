@@ -69,8 +69,8 @@
     "continue": "I've done this — continue"
   },
   "verify": {
-    "title": "Prove the real account is yours",
-    "sub": "This takes 60 seconds and it is the reason Shield can be trusted. Until you do this, your case link will not work — which is exactly what stops someone using this tool against an innocent person.",
+    "title": "Confirm the account is yours",
+    "sub": "Your case link stays private until we know you're the person being impersonated. That's what stops this tool being pointed at innocent people. Two ways to do it — the second is instant when it works.",
     "codeLabel": "Your verification code",
     "how": "Add this code to your bio, or post it in a story, on {handle}. Then tap the button below. You can remove it straight after.",
     "check": "I've posted it — check now",
@@ -78,7 +78,14 @@
     "failed": "We couldn't find the code on {handle} yet. Instagram can take a minute to update. Wait a moment and try again.",
     "manual": "Can't do this right now?",
     "manualD": "Your evidence pack, complaint drafts and escalation guidance are all available without verification. Only the public case link — the part that mobilises other people — needs it.",
-    "skip": "Skip for now, open my dashboard"
+    "skip": "Skip for now, open my dashboard",
+    "indeterminate": "Instagram didn't send us your profile text, so we couldn't check. This happens often and it does not mean you did anything wrong — it means the platform withheld the page from our server.",
+    "requestReview": "Ask a human to check instead",
+    "reviewSent": "Sent for review. Someone will check @{handle} and publish your case if it's genuine — usually within a few hours. Everything else on this page works right now.",
+    "reviewPrimary": "Ask a person to check",
+    "reviewPrimaryD": "We look at @{handle} ourselves and publish your case, usually within a few hours. This always works.",
+    "autoTitle": "Or try the instant check",
+    "autoD": "Put the code below in your bio on @{handle}, then tap check. Instagram often refuses to show profiles to our server, so this may not work — if it doesn't, use the option above. It is not your fault."
   },
   "case": {
     "alert": "This account is FAKE",

@@ -20,9 +20,12 @@ export default async function Manage({ params }: { params: Promise<{ id: string 
        "upload","uploading","uploadHint","artifacts_one","artifacts_other","story","storyHint",
        "download"].map((k) => [k, t(`manage.${k}`)]),
     ),
-    vTitle: t("verify.title"), vSub: t("verify.sub"), codeLabel: t("verify.codeLabel"),
+    vTitle: t("verify.title"), vSub: t("verify.sub"),
+    reviewPrimary: t("verify.reviewPrimary"), reviewPrimaryD: t("verify.reviewPrimaryD"),
+    autoTitle: t("verify.autoTitle"), autoD: t("verify.autoD"), codeLabel: t("verify.codeLabel"),
     how: t("verify.how"), check: t("verify.check"), checking: t("verify.checking"),
-    failed: t("verify.failed"), manual: t("verify.manual"), manualD: t("verify.manualD"),
+    failed: t("verify.failed"), indeterminate: t("verify.indeterminate"),
+    requestReview: t("verify.requestReview"), reviewSent: t("verify.reviewSent"), manual: t("verify.manual"), manualD: t("verify.manualD"),
     whatsapp: t("case.whatsapp"), copied: t("common.copied"), loading: t("common.loading"),
   };
 

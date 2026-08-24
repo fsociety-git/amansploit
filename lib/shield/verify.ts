@@ -2,7 +2,7 @@ import { profileUrl } from "./handles";
 
 export type VerifyOutcome =
   | { ok: true; method: "bio" }
-  | { ok: false; reason: "not_found" | "unreachable" | "blocked" };
+  | { ok: false; reason: "not_found" | "unreachable" | "blocked" | "indeterminate" };
 
 /**
  * Ownership check: does the public profile at `handle` currently display `code`?
