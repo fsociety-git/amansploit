@@ -19,6 +19,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: "https://amansploit.com", changeFrequency: "monthly" as const, priority: 1 },
     { url: "https://amansploit.com/tools", changeFrequency: "monthly" as const, priority: 0.9 },
+    // Only the three public Shield pages. Individual case pages are noindex by
+    // design — they name a real person and are meant to circulate by link, not search.
+    { url: "https://amansploit.com/shield", changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: "https://amansploit.com/shield/guide", changeFrequency: "monthly" as const, priority: 0.7 },
+    { url: "https://amansploit.com/shield/about", changeFrequency: "yearly" as const, priority: 0.5 },
     { url: "https://amansploit.com/tools/email-spoofing", changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/attack-surface", changeFrequency: "monthly" as const, priority: 0.9 },
     { url: "https://amansploit.com/tools/dns", changeFrequency: "monthly" as const, priority: 0.9 },

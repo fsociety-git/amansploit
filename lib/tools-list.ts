@@ -8,6 +8,12 @@
  */
 export const TOOLS_LIST = [
   {
+    href: "/shield",
+    name: "Someone is impersonating you",
+    desc: "Emergency response for a fake Instagram or WhatsApp account in your name. Mobilises your contacts to report it, preserves the evidence with hashes and timestamps, and drafts your cybercrime complaint and grievance escalation. Free, no signup, works in English and Hindi.",
+    tag: "impersonation \u00b7 India \u00b7 free",
+  },
+  {
     href: "/tools/email-spoofing",
     name: "Can someone send email as you?",
     desc: "Checks SPF, DKIM and DMARC and tells you, in plain English, whether anyone can forge mail from your domain. Most companies fail this.",

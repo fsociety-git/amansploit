@@ -8,6 +8,9 @@
   --color-ink: #e8eef4;
   --color-dim: #8a99a8;
   --color-acid: #2de0b3;
+  /* Shield-only states. The rest of its palette is already yours. */
+  --color-alarm: #ff6b6b;
+  --color-warn: #f5c451;
   --font-display: "Space Grotesk", "Arial", sans-serif;
   --font-body: "Inter", "Arial", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -278,3 +281,7 @@ html[data-motion="reduced"] * {
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
 }
+
+/* Shield: every interactive target is at least 48px. Its users are panicking,
+   one-handed, often on a cracked screen. WCAG's 44px is a floor, not a goal. */
+.tap { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; }
