@@ -3,6 +3,22 @@ import { Wordmark, Footer, ShieldMark } from "@/components/shield/Brand";
 import { getDict } from "@/lib/shield/i18n";
 import { preferredLocale } from "@/lib/shield/net";
 
+// Without this the page inherits the portfolio's title and a visitor in the
+// middle of an impersonation sees a tab named after a security consultant.
+export const metadata = {
+  title: "Shield — someone made a fake account pretending to be you",
+  description:
+    "Free emergency response for social media impersonation in India. Get your contacts reporting the fake account within minutes, preserve the evidence, and draft your cybercrime complaint. No signup. English and Hindi.",
+  alternates: { canonical: "https://amansploit.com/shield" },
+  openGraph: {
+    title: "Shield — impersonation response",
+    description:
+      "Someone made a fake account pretending to be you. Free, no signup, works on any phone.",
+    url: "https://amansploit.com/shield",
+    type: "website",
+  },
+};
+
 export default async function Home() {
   const locale = await preferredLocale();
   const t = getDict(locale);

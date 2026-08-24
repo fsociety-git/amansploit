@@ -3,7 +3,10 @@ import Wizard from "@/components/shield/Wizard";
 import { getDict } from "@/lib/shield/i18n";
 import { preferredLocale } from "@/lib/shield/net";
 
-export const metadata = { robots: { index: false } };
+export const metadata = {
+  title: "Create a case — Shield by amansploit",
+  robots: { index: false },
+};
 
 export default async function NewCase() {
   const locale = await preferredLocale();
