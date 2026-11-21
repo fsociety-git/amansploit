@@ -97,6 +97,22 @@ export const CASES = [
     stack: ["Python", "asyncio", "Tor", "SQLite", "simhash"],
   },
   {
+    kicker: "CLIENT PLATFORM",
+    title: "Aamchi Speedway — Booking Site, Racer App & Ops Console",
+    slug: "aamchi-speedway",
+    body: [
+      { h: "What was built", p: "This is the first web presence for a go-karting track in Nagpur. Three things are live in production at aamchispeedway.in: a public site with slot booking and Razorpay deposits, an installable racer app with licences, lap times, leaderboards, and moderated chat, and a 12-screen operations console the staff run from a phone. One platform, built on Next.js, TypeScript, Supabase/PostgreSQL, and Vercel." },
+      { h: "Why a booking site is a security problem", p: "A booking is a price and a slot. Both are things a customer would happily choose for themselves: a lower price, a slot that is already full. If the browser is allowed to state either as a fact, the system will sooner or later be told something untrue and act on it. So the design question is not which buttons to hide. It is which layer gets to decide." },
+      { h: "The database is the boundary", p: "I designed the database as the security boundary. Row Level Security is on for all 41 tables. The point of putting the rule in the database is that it does not depend on application code remembering a check. The values that carry money or scarcity — pricing, capacity, vouchers, and prizes — are writable only through server-side database functions, never from the browser." },
+      { h: "What the audit found", p: "A design is only a claim until it is tested. Before delivery I ran a security audit of the platform against the OWASP Top 10 and the OWASP API Security Top 10, and closed its findings. One was a broken-access-control flaw that let any signed-in user write a booking at an arbitrary price. Another was latent: a privilege-escalation path through a user-editable profile email. The rest were the unglamorous kind — missing security headers, unthrottled public forms, and a framework upgrade for published advisories." },
+      { h: "The payment path", p: "The price of a booking is set on the server, not taken from the browser. On both the checkout callback and the webhook, the HMAC signature is verified with a constant-time comparison. Settlement is idempotent, so a callback that is replayed changes nothing." },
+    ],
+    problem: "A Nagpur go-karting track's first web presence: slot booking with deposits, a racer app, and an operations console the staff run from a phone.",
+    build: "Three-part platform: a public site with slot booking and Razorpay deposits, an installable racer app, and a 12-screen operations console. Row Level Security on all 41 tables, with pricing, capacity, vouchers, and prizes writable only through server-side database functions.",
+    result: "Live in production at aamchispeedway.in. Pre-delivery audit against the OWASP Top 10 and API Security Top 10, findings closed — including a flaw that let any signed-in user write a booking at an arbitrary price.",
+    stack: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Razorpay"],
+  },
+  {
     kicker: "SECURE SDLC",
     title: "ACS FRAT — Flight Risk Assessment Platform",
     slug: "acs-frat",
